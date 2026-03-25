@@ -1,0 +1,576 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-playfair: 'Playfair Display', serif;
+  --font-dm-sans: 'DM Sans', sans-serif;
+  --font-space-mono: 'Space Mono', monospace;
+
+  /* ── Semantic theme tokens ── */
+  --bg:            #fafaf9;
+  --bg-surface:    #f5f4f1;
+  --bg-card:       rgba(255,255,255,0.8);
+  --text-high:     #1c1917;
+  --text-mid:      #57534e;
+  --text-low:      #a8a29e;
+  --border-sub:    #e7e5e4;
+  --border-main:   #d6d3d1;
+  --accent:        #c8a96e;
+  --accent-hover:  #dfc08a;
+  --accent-dark:   #a8893e;
+  --navbar-bg:     rgba(250,250,249,0.88);
+  --grid-line:     rgba(0,0,0,0.06);
+  --preview-bg:    #eceae4;
+}
+
+.dark {
+  --bg:            #0f0f0e;
+  --bg-surface:    #1a1a18;
+  --bg-card:       rgba(20,20,18,0.7);
+  --text-high:     #e8e8e0;
+  --text-mid:      #ababab;
+  --text-low:      #4a4a44;
+  --border-sub:    #1e1e1c;
+  --border-main:   #333330;
+  --accent:        #c8a96e;
+  --accent-hover:  #dfc08a;
+  --accent-dark:   #a8893e;
+  --navbar-bg:     rgba(15,15,14,0.88);
+  --grid-line:     rgba(200,169,110,0.035);
+  --preview-bg:    #0d0d14;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-high);
+  font-family: var(--font-dm-sans);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* ─────────────────────────────────────
+   KEYFRAMES — text / entrance
+───────────────────────────────────── */
+@keyframes revealLine {
+  0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+  100% { clip-path: inset(0 0%   0 0); opacity: 1; }
+}
+
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes scrollLine {
+  0%   { top: 0;    height: 0%;   opacity: 1; }
+  50%  { top: 0;    height: 100%; opacity: 1; }
+  100% { top: 100%; height: 0%;   opacity: 0; }
+}
+
+/* ─────────────────────────────────────
+   KEYFRAMES — 3D / spatial
+───────────────────────────────────── */
+
+/* Continuous 3-axis float for profile photo */
+@keyframes float3D {
+  0%   { transform: perspective(800px) translateY(0px)   rotateX(0deg)   rotateY(0deg); }
+  20%  { transform: perspective(800px) translateY(-10px) rotateX(3deg)   rotateY(-4deg); }
+  40%  { transform: perspective(800px) translateY(-18px) rotateX(0deg)   rotateY(-2deg); }
+  60%  { transform: perspective(800px) translateY(-12px) rotateX(-3deg)  rotateY(4deg); }
+  80%  { transform: perspective(800px) translateY(-6px)  rotateX(-1deg)  rotateY(2deg); }
+  100% { transform: perspective(800px) translateY(0px)   rotateX(0deg)   rotateY(0deg); }
+}
+
+/* Slow orbit for decorative particles around photo */
+@keyframes orbit {
+  0%   { transform: rotate(0deg)   translateX(var(--orbit-r, 150px)) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(var(--orbit-r, 150px)) rotate(-360deg); }
+}
+@keyframes orbitReverse {
+  0%   { transform: rotate(0deg)    translateX(var(--orbit-r, 180px)) rotate(0deg); }
+  100% { transform: rotate(-360deg) translateX(var(--orbit-r, 180px)) rotate(360deg); }
+}
+
+/* Spinning decorative ring */
+@keyframes ringRotate {
+  0%   { transform: rotateX(70deg) rotateZ(0deg); }
+  100% { transform: rotateX(70deg) rotateZ(360deg); }
+}
+
+/* Pulsing glow on photo border */
+@keyframes photoGlow {
+  0%,100% { box-shadow: 0 0 20px rgba(200,169,110,0.3), 0 0 50px rgba(200,169,110,0.08); }
+  50%      { box-shadow: 0 0 35px rgba(200,169,110,0.55), 0 0 80px rgba(200,169,110,0.18); }
+}
+
+/* Terminal cursor blink */
+@keyframes terminalBlink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0; }
+}
+
+/* Typing line appear */
+@keyframes typeLine {
+  0%   { width: 0; opacity: 0; }
+  5%   { opacity: 1; }
+  100% { width: 100%; opacity: 1; }
+}
+
+/* Browser preview UI shimmer */
+@keyframes previewPulse {
+  0%,100% { opacity: 0.6; }
+  50%     { opacity: 1; }
+}
+
+/* Orbit dot fade-in pulse */
+@keyframes orbitPulse {
+  0%,100% { transform: scale(1);   opacity: 0.9; }
+  50%     { transform: scale(1.4); opacity: 1; }
+}
+
+/* ─────────────────────────────────────
+   UTILITY ANIMATION CLASSES
+───────────────────────────────────── */
+.animate-reveal-line {
+  animation: revealLine 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+.animate-float-up {
+  animation: floatUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.animate-float-up-delay {
+  opacity: 0;
+  animation: floatUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+.animate-float-up-delay-2 {
+  opacity: 0;
+  animation: floatUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+}
+.animate-float-up-delay-3 {
+  opacity: 0;
+  animation: floatUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
+}
+
+/* ─────────────────────────────────────
+   PROFILE PHOTO 3D
+───────────────────────────────────── */
+.photo-float {
+  animation: float3D 7s ease-in-out infinite;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.photo-glow {
+  animation: photoGlow 3s ease-in-out infinite;
+  border-radius: 50%;
+}
+
+/* Orbit particles */
+.orbit-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: orbit var(--orbit-dur, 6s) linear infinite;
+}
+
+.orbit-particle-reverse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -4px;
+  margin-left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: orbitReverse var(--orbit-dur, 9s) linear infinite;
+}
+
+.orbit-dot-pulse {
+  animation: orbitPulse 2s ease-in-out infinite;
+}
+
+/* 3D perspective ring */
+.ring-3d {
+  border-radius: 50%;
+  animation: ringRotate var(--ring-dur, 8s) linear infinite;
+}
+
+/* ─────────────────────────────────────
+   TERMINAL CARD
+───────────────────────────────────── */
+.terminal-card {
+  background: #070f07;
+  border: 1px solid #1d3a1d;
+  font-family: var(--font-space-mono);
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle scanline overlay */
+.terminal-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,255,0,0.012) 2px,
+    rgba(0,255,0,0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.terminal-content {
+  position: relative;
+  z-index: 1;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: #4ade80;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: terminalBlink 1.1s step-end infinite;
+}
+
+.terminal-line {
+  overflow: hidden;
+  white-space: nowrap;
+  color: #4ade80;
+  opacity: 0;
+}
+
+.terminal-line.visible {
+  animation: typeLine 0.6s ease forwards;
+}
+
+/* ─────────────────────────────────────
+   BROWSER / WEB CARD
+───────────────────────────────────── */
+.browser-card {
+  background: #0d0d14;
+  border: 1px solid #22224a;
+}
+
+.browser-chrome {
+  background: #1a1a2e;
+  border-bottom: 1px solid #22224a;
+}
+
+.browser-addressbar {
+  background: #0f0f1f;
+  border: 1px solid #2a2a4a;
+  border-radius: 4px;
+  color: #7878aa;
+  font-family: var(--font-space-mono);
+  font-size: 11px;
+}
+
+/* ─────────────────────────────────────
+   3D CARD TILT
+───────────────────────────────────── */
+.tilt-wrapper {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.tilt-card:hover {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+              0 10px 30px rgba(200,169,110,0.08);
+}
+
+/* Content lifted in Z on tilt */
+.tilt-inner {
+  transform: translateZ(20px);
+  transform-style: preserve-3d;
+}
+
+/* Project card entrance */
+.project-card {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.project-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────
+   SHIMMER TEXT
+───────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #c8a96e 0%,
+    #f0d090 25%,
+    #c8a96e 50%,
+    #a8893e 75%,
+    #c8a96e 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ─────────────────────────────────────
+   NOISE GRAIN
+───────────────────────────────────── */
+.grain-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+}
+
+/* ─────────────────────────────────────
+   NAVBAR
+───────────────────────────────────── */
+.navbar-glass {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: var(--navbar-bg);
+  border-bottom: 1px solid rgba(200, 169, 110, 0.12);
+  transition: background-color 0.4s ease;
+}
+
+/* ─────────────────────────────────────
+   MISC UTILITIES
+───────────────────────────────────── */
+.section-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 169, 110, 0.4), transparent);
+}
+
+.skill-pill {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.skill-pill:hover {
+  background-color: rgba(200, 169, 110, 0.15);
+  border-color: rgba(200, 169, 110, 0.5);
+  color: #c8a96e;
+}
+
+/* Skill / education card hover */
+.card-hover {
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px; width: 0;
+  background: linear-gradient(90deg, #c8a96e, #a8893e);
+  transition: width 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.card-hover:hover::after { width: 100%; }
+
+/* Scrollbar */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #e7e5e4; }
+::-webkit-scrollbar-thumb  { background: #c8c4be; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #c8a96e; }
+.dark::-webkit-scrollbar-track  { background: #0f0f0e; }
+.dark::-webkit-scrollbar-thumb  { background: #333330; }
+
+@keyframes loaderBar {
+  0%   { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* Focus & selection */
+:focus-visible { outline: 2px solid #c8a96e; outline-offset: 3px; border-radius: 2px; }
+::selection    { background-color: rgba(200, 169, 110, 0.3); color: #f5f5f0; }
+
+/* ── Custom cursor (pointer devices only) ── */
+@media (pointer: fine) {
+  .custom-cursor,
+  .custom-cursor * { cursor: none !important; }
+}
+
+/* ─────────────────────────────────────
+   EXTRA 3D KEYFRAMES
+───────────────────────────────────── */
+
+/* Organic morphing blob behind photo */
+@keyframes morphBlob {
+  0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  20%     { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  40%     { border-radius: 50% 50% 30% 70% / 40% 60% 70% 30%; }
+  60%     { border-radius: 40% 60% 50% 50% / 30% 40% 70% 60%; }
+  80%     { border-radius: 55% 45% 40% 60% / 55% 35% 65% 45%; }
+}
+
+/* Expanding ripple rings from photo */
+@keyframes rippleExpand {
+  0%   { transform: translate(-50%,-50%) scale(1);   opacity: 0.45; }
+  100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+}
+
+/* Subtle 3D bob for floating tech tags */
+@keyframes float3DTag {
+  0%,100% { transform: translateZ(50px) translateY(0px) rotateY(0deg); }
+  33%     { transform: translateZ(60px) translateY(-5px) rotateY(4deg); }
+  66%     { transform: translateZ(55px) translateY(-3px) rotateY(-3deg); }
+}
+
+/* Spinning 3D wireframe cube accent */
+@keyframes cubeRotateY { 0% { transform: rotateY(0deg) rotateX(15deg); } 100% { transform: rotateY(360deg) rotateX(15deg); } }
+@keyframes cubeRotateX { 0% { transform: rotateX(0deg) rotateZ(15deg); } 100% { transform: rotateX(360deg) rotateZ(15deg); } }
+
+/* Resume button pulse glow */
+@keyframes resumePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(200,169,110,0); }
+  50%     { box-shadow: 0 0 0 6px rgba(200,169,110,0.15); }
+}
+
+/* CLI "How to Run" highlight flash */
+@keyframes cmdFadeIn {
+  0%   { opacity: 0; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ─────────────────────────────────────
+   EXTRA 3D UTILITY CLASSES
+───────────────────────────────────── */
+
+/* Morphing blob */
+.blob-morph {
+  animation: morphBlob 9s ease-in-out infinite;
+  will-change: border-radius;
+}
+
+/* Ripple rings */
+.ripple-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(200,169,110,0.25);
+  pointer-events: none;
+  animation: rippleExpand 4s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Floating 3D tech tag */
+.float-tag-3d {
+  animation: float3DTag 5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+.float-tag-3d:nth-child(even) {
+  animation-delay: -2.5s;
+  animation-duration: 6s;
+}
+
+/* Resume button glow */
+.resume-btn-glow {
+  animation: resumePulse 2.5s ease-in-out infinite;
+}
+
+/* CLI how-to-run lines */
+.cmd-line {
+  opacity: 0;
+  animation: cmdFadeIn 0.4s ease forwards;
+}
+
+/* ── 3D wireframe cube (CSS model) ── */
+@keyframes cubeFloat {
+  0%,100% { transform: rotateX(15deg)  rotateY(0deg)   translateY(0px); }
+  25%     { transform: rotateX(20deg)  rotateY(90deg)  translateY(-14px); }
+  50%     { transform: rotateX(15deg)  rotateY(180deg) translateY(-22px); }
+  75%     { transform: rotateX(10deg)  rotateY(270deg) translateY(-8px); }
+}
+
+@keyframes diamondFloat {
+  0%,100% { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg)   translateY(0px); }
+  33%     { transform: rotateX(120deg) rotateY(60deg)  rotateZ(20deg)  translateY(-18px); }
+  66%     { transform: rotateX(240deg) rotateY(120deg) rotateZ(-20deg) translateY(-8px); }
+}
+
+@keyframes spherePulse {
+  0%,100% { transform: scale(1) rotateZ(0deg);   box-shadow: 0 0 30px rgba(200,169,110,0.15), inset -15px -15px 30px rgba(0,0,0,0.3); }
+  50%     { transform: scale(1.06) rotateZ(180deg); box-shadow: 0 0 50px rgba(200,169,110,0.25), inset -15px -15px 30px rgba(0,0,0,0.2); }
+}
+
+.cube-3d {
+  transform-style: preserve-3d;
+  animation: cubeFloat 14s ease-in-out infinite;
+}
+.cube-face {
+  position: absolute;
+  border: 1px solid rgba(200,169,110,0.18);
+  background: transparent;
+}
+
+/* ── Sphere model ── */
+.sphere-3d {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(200,169,110,0.25), rgba(200,169,110,0.04) 55%, transparent);
+  animation: spherePulse 7s ease-in-out infinite;
+}
+
+/* ── Light-mode surface overrides ── */
+html:not(.dark) .terminal-card   { background: #070f07; border-color: #1d3a1d; }
+html:not(.dark) .browser-card    { background: rgba(255,255,255,0.9); border-color: #e2dfd8; }
+/* browser-chrome and browser-addressbar intentionally stay dark in light mode — no overrides */
+html:not(.dark) .section-rule    { background: linear-gradient(90deg, transparent, rgba(168,137,62,0.4), transparent); }
+html:not(.dark) .skill-pill:hover { background-color: rgba(168,137,62,0.1); border-color: rgba(168,137,62,0.4); color: #96762a; }
+html:not(.dark) .card-hover:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+html:not(.dark) .card-hover::after { background: linear-gradient(90deg, #a8893e, #96762a); }
+
+/* Copied toast */
+.copy-toast {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1c;
+  border: 1px solid rgba(200,169,110,0.3);
+  color: #c8a96e;
+  font-family: var(--font-space-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: floatUp 0.3s ease forwards;
+}
