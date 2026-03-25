@@ -3,13 +3,16 @@
 import { useEffect, useState } from "react";
 
 export default function PageLoader() {
+  const [ready,  setReady]  = useState(false);
   const [hiding, setHiding] = useState(false);
   const [gone,   setGone]   = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setHiding(true),  900);
-    const t2 = setTimeout(() => setGone(true),   1450);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    // Trigger animation only after hydration is complete
+    const t0 = setTimeout(() => setReady(true),   50);
+    const t1 = setTimeout(() => setHiding(true),  950);
+    const t2 = setTimeout(() => setGone(true),   1500);
+    return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   if (gone) return null;
@@ -26,7 +29,11 @@ export default function PageLoader() {
         <div className="relative w-36 h-[2px] bg-stone-200 dark:bg-ink-800 rounded-full overflow-hidden">
           <div
             className="absolute inset-y-0 left-0 bg-accent rounded-full"
-            style={{ animation: "loaderBar 0.85s cubic-bezier(0.4,0,0.2,1) forwards" }}
+            style={
+              ready
+                ? { animation: "loaderBar 0.85s cubic-bezier(0.4,0,0.2,1) forwards" }
+                : { width: "0%" }
+            }
           />
         </div>
 

@@ -1,7 +1,31 @@
 import type { Metadata } from "next";
+import { Playfair_Display, DM_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import CursorGlow from "@/components/CursorGlow";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Hamza Bhatti — Frontend Developer & AI-Assisted Builder",
@@ -23,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
+    <html lang="en" className={`scroll-smooth dark ${playfair.variable} ${dmSans.variable} ${spaceMono.variable}`} suppressHydrationWarning>
       <head>
         {/* ── No-flash theme init — runs before paint ── */}
         <script

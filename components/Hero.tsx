@@ -120,7 +120,7 @@ export default function Hero() {
       {/* ── Ghost profile background (blurred photo layer) ── */}
       {!photoError && (
         <div aria-hidden="true" className="pointer-events-none absolute right-[-4%] top-1/2 -translate-y-1/2 w-[520px] h-[520px] overflow-hidden rounded-full opacity-[0.06] dark:opacity-[0.035]">
-          <Image src="/images/profile-pic.jpg" alt="" fill className="object-cover object-top blur-3xl scale-110" priority />
+          <Image src="/images/profile-pic.jpeg" alt="" fill className="object-cover object-top blur-3xl scale-110" priority />
         </div>
       )}
 
@@ -288,20 +288,68 @@ export default function Hero() {
       </div>
 
       {/* ── Mobile photo ── */}
-      <div className="md:hidden flex justify-center pb-16 relative">
-        {[0, 1].map((i) => (
-          <div key={i} aria-hidden="true" className="ripple-ring" style={{ width: 208, height: 208, animationDelay: `${i * 1.8}s` }} />
-        ))}
-        <div className="relative photo-float">
-          <div aria-hidden="true" className="blob-morph absolute inset-0 rounded-full opacity-60" style={{ background: "radial-gradient(ellipse, rgba(200,169,110,0.18) 0%, transparent 75%)" }} />
-          <div className="relative w-52 h-52 rounded-full overflow-hidden border-2 border-accent/50 photo-glow">
-            {!photoError ? (
-              <Image src="/images/profile-pic.jpg" alt="Hamza Bhatti" fill className="object-cover object-top" onError={() => setPhotoError(true)} />
-            ) : (
-              <div className="w-full h-full bg-stone-100 dark:bg-ink-800 flex items-center justify-center">
-                <span className="font-display text-4xl font-bold text-accent">HB</span>
-              </div>
-            )}
+      <div className="md:hidden flex justify-center pb-20 relative">
+        <div className="relative will-change-transform">
+
+          {/* Morphing blob */}
+          <div aria-hidden="true" className="blob-morph absolute"
+            style={{ width: 280, height: 280, top: "50%", left: "50%", transform: "translate(-50%,-50%)", background: "radial-gradient(ellipse at center, rgba(200,169,110,0.14) 0%, rgba(168,137,62,0.06) 55%, transparent 80%)", zIndex: 0 }} />
+
+          {/* Ripple rings */}
+          {[0, 1, 2].map((i) => (
+            <div key={i} aria-hidden="true" className="ripple-ring" style={{ width: 208, height: 208, animationDelay: `${i * 1.4}s`, animationDuration: "4.2s", zIndex: 0 }} />
+          ))}
+
+          {/* 3D spinning rings */}
+          <div aria-hidden="true" className="ring-3d absolute rounded-full border border-accent/20"
+            style={{ width: 296, height: 296, top: "50%", left: "50%", transform: "translate(-50%,-50%) rotateX(70deg)", "--ring-dur": "10s", zIndex: 0 } as React.CSSProperties} />
+          <div aria-hidden="true" className="absolute rounded-full border border-accent/10"
+            style={{ width: 336, height: 336, top: "50%", left: "50%", transform: "translate(-50%,-50%) rotateX(70deg)", animation: "ringRotate 14s linear infinite reverse", zIndex: 0 }} />
+
+          {/* Orbit particles */}
+          {([
+            { r: "118px", dur: "7s",  dir: false, sz: "8px",  color: "bg-accent",    delay: "0s"  },
+            { r: "132px", dur: "11s", dir: true,  sz: "6px",  color: "bg-accent/50", delay: "-4s" },
+            { r: "108px", dur: "9s",  dir: false, sz: "6px",  color: "bg-accent/70", delay: "-3s" },
+          ] as const).map((p, i) => (
+            <div key={i} aria-hidden="true"
+              className={p.dir ? "orbit-particle-reverse" : "orbit-particle"}
+              style={{ "--orbit-r": p.r, "--orbit-dur": p.dur, animationDelay: p.delay, zIndex: 1 } as React.CSSProperties}
+            >
+              <div className={`rounded-full ${p.color}`} style={{ width: p.sz, height: p.sz }} />
+            </div>
+          ))}
+
+          {/* Photo + float3D + glow + badges */}
+          <div className="photo-float relative" style={{ transformStyle: "preserve-3d", zIndex: 2 }}>
+            {/* Glow ring */}
+            <div aria-hidden="true" className="photo-glow absolute -inset-1.5 rounded-full"
+              style={{ background: "linear-gradient(135deg, rgba(200,169,110,0.45), rgba(168,137,62,0.12), rgba(200,169,110,0.45))" }} />
+
+            {/* Photo */}
+            <div className="relative w-52 h-52 rounded-full overflow-hidden border-2 border-accent/50">
+              {!photoError ? (
+                <Image src="/images/profile-pic.jpeg" alt="Hamza Bhatti" fill className="object-cover object-top" onError={() => setPhotoError(true)} />
+              ) : (
+                <div className="w-full h-full bg-stone-100 dark:bg-ink-800 flex items-center justify-center">
+                  <span className="font-display text-4xl font-bold text-accent">HB</span>
+                </div>
+              )}
+            </div>
+
+            {/* Floating badges */}
+            <div className="float-tag-3d absolute -bottom-5 left-1/2 px-4 py-1.5 rounded-full border border-accent/35 navbar-glass whitespace-nowrap" style={{ transform: "translateX(-50%) translateZ(30px)" }} aria-hidden="true">
+              <span className="font-mono text-[10px] text-accent tracking-widest">Frontend Dev</span>
+            </div>
+            <div className="float-tag-3d absolute -top-3 -right-6 px-2.5 py-1 rounded-lg border border-stone-200 dark:border-ink-700 bg-white/90 dark:bg-ink-900/90 backdrop-blur-sm" style={{ transform: "translateZ(35px)" }} aria-hidden="true">
+              <span className="font-mono text-[10px] text-blue-500 dark:text-blue-400">TypeScript ✦</span>
+            </div>
+            <div className="float-tag-3d absolute top-1/3 -left-10 px-2.5 py-1 rounded-lg border border-stone-200 dark:border-ink-700 bg-white/90 dark:bg-ink-900/90 backdrop-blur-sm" style={{ transform: "translateY(-50%) translateZ(35px)" }} aria-hidden="true">
+              <span className="font-mono text-[10px] text-stone-700 dark:text-ink-300">Next.js</span>
+            </div>
+            <div className="float-tag-3d absolute top-4 -left-5 px-2.5 py-1 rounded-lg border border-purple-200 dark:border-purple-800/60 bg-purple-50/80 dark:bg-purple-950/50 backdrop-blur-sm" style={{ transform: "translateZ(28px)" }} aria-hidden="true">
+              <span className="font-mono text-[10px] text-purple-600 dark:text-purple-400">AI Builder</span>
+            </div>
           </div>
         </div>
       </div>
