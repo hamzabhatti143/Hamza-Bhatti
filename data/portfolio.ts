@@ -208,8 +208,8 @@ export const experiences: Experience[] = [
   {
     role: "Next.js Developer",
     company: "N6N",
-    period: "July 2025 – Present",
-    current: true,
+    period: "July 2025 – December 2025",
+    current: false,
     points: [
       "Developed and deployed scalable frontend applications using React and Next.js.",
       "Integrated secure RESTful APIs and built responsive UI components with TypeScript and Tailwind CSS.",
