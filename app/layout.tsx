@@ -3,6 +3,7 @@ import { Playfair_Display, DM_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import CursorGlow from "@/components/CursorGlow";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="grain-overlay antialiased">
         <CursorGlow />
+        <WhatsAppFloat />
         <ThemeProvider>
           {children}
         </ThemeProvider>

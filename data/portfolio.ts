@@ -5,6 +5,8 @@ export const personalInfo = {
   email: "mailto:bhatti3993@gmail.com",
   github: "https://github.com/hamzabhatti143",
   linkedin: "https://www.linkedin.com/in/hamzabhatti143",
+  whatsapp: "https://wa.me/923243373891",
+  phone: "+92 324 3373891",
   resumeUrl: "/files/Hamzabhatti-web.pdf",
 } as const;
 
