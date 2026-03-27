@@ -1,7 +1,7 @@
 export const personalInfo = {
   name: "Hamza Bhatti",
-  tagline: "Frontend Developer & AI-Assisted Builder",
-  bio: "I craft modern web experiences with clean code and an eye for design. Passionate about building at the intersection of frontend engineering and AI-assisted development.",
+  tagline: "Frontend Developer & Agentic-AI Builder",
+  bio: "I craft modern web experiences with clean code and an eye for design. Passionate about building at the intersection of frontend engineering and Agentic-AI development.",
   email: "mailto:bhatti3993@gmail.com",
   github: "https://github.com/hamzabhatti143",
   linkedin: "https://www.linkedin.com/in/hamzabhatti143",
@@ -321,8 +321,14 @@ export type Education = {
 
 export const education: Education[] = [
   {
+    degree: "Bachelor of Business & Information Technology (BBIT)",
+    institution: "Virtual University of Pakistan",
+    description:
+      "Undergraduate degree combining business administration and information technology — covering software engineering, database systems, project management, and entrepreneurship.",
+  },
+  {
     degree: "Front-End Development",
-    institution: "PFTP (Presidential Initiative for AI)",
+    institution: "PFTP – Professional Freelancing Training Program",
     description:
       "Comprehensive training in modern front-end development covering HTML5, CSS3, JavaScript, TypeScript, and Next.js with hands-on project-based learning.",
   },
