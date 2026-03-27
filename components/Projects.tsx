@@ -428,6 +428,29 @@ export default function Projects() {
           <div aria-hidden="true" className="section-rule w-full mt-8" />
         </div>
 
+        {/* ── Web section ── */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-2">
+            <span aria-hidden="true" className="w-2 h-2 rounded-full bg-accent" />
+            <h3 className="font-mono text-xs tracking-[0.25em] uppercase text-accent">Web / Browser</h3>
+          </div>
+          <div aria-hidden="true" className="flex-1 h-px bg-accent/20" />
+          <span className="font-mono text-[10px] text-ink-700">
+            {String(webProjects.length).padStart(2, "0")} projects
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" role="list" aria-label="Web and browser-based projects">
+          {webProjects.map((project, i) => (
+            <div key={project.title} role="listitem" className="flex">
+              <WebCard project={project} staggerDelay={`${i * 90}ms`} />
+            </div>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div aria-hidden="true" className="section-rule w-full mb-16" />
+
         {/* ── CLI section header + explainer banner ── */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-5">
@@ -487,33 +510,10 @@ export default function Projects() {
         </div>
 
         {/* CLI cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16" role="list" aria-label="CLI and terminal projects">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" role="list" aria-label="CLI and terminal projects">
           {cliProjects.map((project, i) => (
             <div key={project.title} role="listitem" className="flex">
-              <TerminalCard project={project} staggerDelay={`${i * 90}ms`} />
-            </div>
-          ))}
-        </div>
-
-        {/* Divider */}
-        <div aria-hidden="true" className="section-rule w-full mb-16" />
-
-        {/* ── Web section ── */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="flex items-center gap-2">
-            <span aria-hidden="true" className="w-2 h-2 rounded-full bg-accent" />
-            <h3 className="font-mono text-xs tracking-[0.25em] uppercase text-accent">Web / Browser</h3>
-          </div>
-          <div aria-hidden="true" className="flex-1 h-px bg-accent/20" />
-          <span className="font-mono text-[10px] text-ink-700">
-            {String(webProjects.length).padStart(2, "0")} projects
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Web and browser-based projects">
-          {webProjects.map((project, i) => (
-            <div key={project.title} role="listitem" className="flex">
-              <WebCard project={project} staggerDelay={`${(cliProjects.length + i) * 90}ms`} />
+              <TerminalCard project={project} staggerDelay={`${(webProjects.length + i) * 90}ms`} />
             </div>
           ))}
         </div>
