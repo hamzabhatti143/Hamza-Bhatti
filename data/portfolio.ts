@@ -5,8 +5,7 @@ export const personalInfo = {
   email: "mailto:bhatti3993@gmail.com",
   github: "https://github.com/hamzabhatti143",
   linkedin: "https://www.linkedin.com/in/hamzabhatti143",
-  /** Place your resume PDF at public/resume.pdf */
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/files/Hamzabhatti-web.pdf",
 } as const;
 
 export type SkillCategory = {

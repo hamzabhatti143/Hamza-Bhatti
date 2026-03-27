@@ -146,7 +146,7 @@ export default function Hero() {
             Available for work
           </p>
 
-          <h1 className="font-display text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tight mb-6">
+          <h1 className="font-display text-6xl sm:text-7xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight mb-6">
             <span className="block overflow-hidden">
               <span className="block animate-reveal-line text-stone-900 dark:text-ink-50">
                 {personalInfo.name.split(" ")[0]}
@@ -161,11 +161,11 @@ export default function Hero() {
 
           <div aria-hidden="true" className="animate-float-up-delay w-20 h-px bg-gradient-to-r from-accent to-transparent mb-7" />
 
-          <p className="animate-float-up-delay font-body text-lg md:text-xl font-light text-stone-600 dark:text-ink-300 max-w-md leading-relaxed mb-3">
+          <p className="animate-float-up-delay font-body text-xl md:text-2xl font-light text-stone-600 dark:text-ink-200 max-w-md leading-relaxed mb-3">
             {personalInfo.tagline}
           </p>
 
-          <p className="animate-float-up-delay-2 font-body text-sm text-stone-400 dark:text-ink-500 max-w-sm leading-relaxed mb-10">
+          <p className="animate-float-up-delay-2 font-body text-base text-stone-500 dark:text-ink-400 max-w-sm leading-relaxed mb-10">
             {personalInfo.bio}
           </p>
 
@@ -207,11 +207,12 @@ export default function Hero() {
           </div>
 
           {/* Scroll indicator */}
-          <div aria-hidden="true" className="animate-float-up-delay-3 mt-14 flex items-center gap-3 text-stone-400 dark:text-ink-600">
-            <div className="relative w-px h-10 bg-stone-200 dark:bg-ink-800 overflow-hidden">
-              <div className="absolute top-0 left-0 w-full bg-accent" style={{ animation: "scrollLine 2s ease-in-out infinite", height: "40%" }} />
+          <div aria-hidden="true" className="animate-float-up-delay-3 mt-14 flex items-center gap-3">
+            {/* Mouse icon */}
+            <div className="relative flex-shrink-0 w-6 h-10 rounded-full border-2 border-stone-400 dark:border-ink-400 flex justify-center pt-1.5">
+              <div className="w-1 h-2.5 rounded-full bg-accent" style={{ animation: "scrollLine 2s ease-in-out infinite" }} />
             </div>
-            <span className="font-mono text-xs tracking-widest uppercase">Scroll</span>
+            <span className="font-mono text-xs tracking-widest uppercase text-stone-500 dark:text-ink-400">Scroll</span>
           </div>
         </div>
 
