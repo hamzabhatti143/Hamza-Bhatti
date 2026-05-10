@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Runtime logs
+uvicorn.log
+uvicorn.err
+*.log
+
+# Secrets
+.env
+
+# Persisted state (auto-generated at runtime)
+portfolio_state.json
