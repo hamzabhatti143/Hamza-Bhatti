@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import CursorGlow from "@/components/CursorGlow";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import VisitorChat from "@/components/VisitorChat";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="grain-overlay antialiased">
         <CursorGlow />
         <WhatsAppFloat />
+        <VisitorChat />
         <ThemeProvider>
           {children}
         </ThemeProvider>

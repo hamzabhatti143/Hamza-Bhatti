@@ -87,6 +87,14 @@ export default function Footer() {
               {" "}— Built with Next.js & Tailwind CSS
             </p>
             <a
+              href="/admin"
+              className="font-mono text-[10px] text-stone-300 dark:text-ink-800 hover:text-stone-400 dark:hover:text-ink-600 transition-colors duration-300"
+              aria-label="Admin panel"
+              tabIndex={-1}
+            >
+              admin
+            </a>
+            <a
               href={personalInfo.whatsapp}
               target="_blank"
               rel="noopener noreferrer"

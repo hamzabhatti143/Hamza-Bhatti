@@ -1,6 +1,6 @@
 export const personalInfo = {
   name: "Hamza Bhatti",
-  tagline: "Frontend Developer & Agentic-AI Builder",
+  tagline: "Frontend Developer & AI-Assisted Builder",
   bio: "I craft modern web experiences with clean code and an eye for design. Passionate about building at the intersection of frontend engineering and Agentic-AI development.",
   email: "mailto:bhatti3993@gmail.com",
   github: "https://github.com/hamzabhatti143",
@@ -16,21 +16,12 @@ export type SkillCategory = {
 };
 
 export const skillCategories: SkillCategory[] = [
-  { category: "Frontend",           skills: ["HTML5", "CSS3", "Tailwind CSS", "Responsive Design", "WordPress"] },
-  { category: "Languages",          skills: ["TypeScript", "JavaScript", "Python", ".NET Core"] },
+  { category: "Frontend", skills: ["HTML5", "CSS3", "Tailwind CSS", "Responsive Design", "WordPress"] },
+  { category: "Languages", skills: ["TypeScript", "JavaScript", "Python", ".NET Core"] },
   { category: "Frameworks & Tools", skills: ["Next.js", "Node.js", "Docker", "Git & GitHub"] },
-  {
-    category: "AI & Modern Tech",
-    skills: ["Agentic AI with OpenAI SDK", "Claude CLI", "Gemini CLI", "Hugging Face", "AI-Driven Development"],
-  },
-  {
-    category: "Concepts",
-    skills: ["Strong Typing", "OOP", "Async Programming", "API Integration", "Microservices", "ADA Accessibility"],
-  },
-  {
-    category: "Other",
-    skills: ["Problem Solving", "Debugging", "Code Structuring", "Basic UI/UX Understanding"],
-  },
+  { category: "AI & Modern Tech", skills: ["Agentic AI with OpenAI SDK", "Claude CLI", "Gemini CLI", "Hugging Face", "AI-Driven Development"] },
+  { category: "Concepts", skills: ["Strong Typing", "OOP", "Async Programming", "API Integration", "Microservices", "ADA Accessibility"] },
+  { category: "Other", skills: ["Problem Solving", "Debugging", "Code Structuring", "Basic UI/UX Understanding"] },
 ];
 
 export type Project = {
@@ -38,19 +29,12 @@ export type Project = {
   description: string;
   tech: string[];
   category: string;
-  /** GitHub repository URL — update with your actual repos */
   githubUrl?: string;
-  /** For CLI projects: shell lines shown in terminal preview */
   cliCommands?: string[];
-  /** For CLI projects: `npx ts-node <file>.ts` run command */
   runCommand?: string;
-  /** If published to npm: `npx <package>` shortcut */
   npxPackage?: string;
-  /** For web projects: URL shown in browser chrome mockup */
   previewUrl?: string;
-  /** Live production URL — shown as "Live Demo" button */
   liveUrl?: string;
-  /** Accent colour for web card preview gradient */
   accentColor?: string;
 };
 
@@ -61,8 +45,8 @@ export const projects: Project[] = [
       "AI-powered agricultural platform using four Agentic AI models with fully containerized microservices architecture built with Docker. Automated matching algorithms improved user compatibility accuracy by 40%.",
     tech: ["Next.js", "Docker", "Hugging Face", "OpenAI Agent SDK", "Microservices", "Python"],
     category: "AI Platform",
-    liveUrl: "https://farm-smart-ai.vercel.app/",
     previewUrl: "farm-smart-ai.vercel.app",
+    liveUrl: "https://farm-smart-ai.vercel.app/",
     accentColor: "#34d399",
   },
   {
@@ -72,8 +56,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "Tailwind CSS"],
     category: "Web App",
     githubUrl: "https://github.com/hamzabhatti143/Hackaton-Q2",
-    liveUrl: "https://hackaton-q2-giaic.vercel.app/",
     previewUrl: "hackaton-q2-giaic.vercel.app",
+    liveUrl: "https://hackaton-q2-giaic.vercel.app/",
     accentColor: "#6ee7b7",
   },
   {
@@ -190,8 +174,8 @@ export const projects: Project[] = [
     cliCommands: [
       "$ npx hamzabhatti-number-game",
       "> Guess a number (1–100):",
-      "> 50  →  Too low! 🔥",
-      "> 75  →  Correct! 🎉",
+      "> 50  →  Too low!",
+      "> 75  →  Correct!",
       "> Tries: 2  > _",
     ],
   },
@@ -202,8 +186,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "AI Integration", "Tailwind CSS"],
     category: "AI Platform",
     githubUrl: "https://github.com/hamzabhatti143/Todo-App-With-Chatbot",
-    liveUrl: "https://todo-app-with-ai-chatbot.vercel.app/",
     previewUrl: "todo-app-with-ai-chatbot.vercel.app",
+    liveUrl: "https://todo-app-with-ai-chatbot.vercel.app/",
     accentColor: "#a78bfa",
   },
   {
@@ -213,8 +197,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "API Integration", "Tailwind CSS"],
     category: "Tool",
     githubUrl: "https://github.com/hamzabhatti143/Currency-Convertor-Nextjs",
-    liveUrl: "https://currency-convertor-pied-iota.vercel.app/",
     previewUrl: "currency-convertor-pied-iota.vercel.app",
+    liveUrl: "https://currency-convertor-pied-iota.vercel.app/",
     accentColor: "#fbbf24",
   },
   {
@@ -224,8 +208,8 @@ export const projects: Project[] = [
     tech: ["TypeScript", "Next.js", "Tailwind CSS"],
     category: "Tool",
     githubUrl: "https://github.com/hamzabhatti143/Random-Password-Generator",
-    liveUrl: "https://random-password-generator-ten-iota.vercel.app/",
     previewUrl: "random-password-generator-ten-iota.vercel.app",
+    liveUrl: "https://random-password-generator-ten-iota.vercel.app/",
     accentColor: "#f43f5e",
   },
   {
@@ -235,8 +219,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "Nodemailer", "Tailwind CSS"],
     category: "Tool",
     githubUrl: "https://github.com/hamzabhatti143/Bulk-Email-Sender",
-    liveUrl: "https://bulk-email-sender-sooty-tau.vercel.app/",
     previewUrl: "bulk-email-sender-sooty-tau.vercel.app",
+    liveUrl: "https://bulk-email-sender-sooty-tau.vercel.app/",
     accentColor: "#6366f1",
   },
   {
@@ -246,8 +230,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
     category: "Website",
     githubUrl: "https://github.com/hamzabhatti143/Airfolio",
-    liveUrl: "https://airfolio-demo.netlify.app/",
     previewUrl: "airfolio-demo.netlify.app",
+    liveUrl: "https://airfolio-demo.netlify.app/",
     accentColor: "#c8a96e",
   },
   {
@@ -257,8 +241,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "Tailwind CSS"],
     category: "Web App",
     githubUrl: "https://github.com/hamzabhatti143/Morrent",
-    liveUrl: "https://morrent-ten.vercel.app/",
     previewUrl: "morrent-ten.vercel.app",
+    liveUrl: "https://morrent-ten.vercel.app/",
     accentColor: "#3b82f6",
   },
   {
@@ -267,8 +251,8 @@ export const projects: Project[] = [
       "A resource-rich WordPress website for homeschooling families, featuring curriculum guides, lesson plans, and community-focused content with a warm, accessible design.",
     tech: ["WordPress", "PHP", "CSS3", "Responsive Design"],
     category: "Website",
-    liveUrl: "https://supermomshomeschooling.com/",
     previewUrl: "supermomshomeschooling.com",
+    liveUrl: "https://supermomshomeschooling.com/",
     accentColor: "#f97316",
   },
   {
@@ -277,9 +261,19 @@ export const projects: Project[] = [
       "A visually rich WordPress website for garden decoration products, with a clean product catalogue, elegant typography, and a fully mobile-responsive layout.",
     tech: ["WordPress", "PHP", "CSS3", "Responsive Design"],
     category: "Website",
-    liveUrl: "https://gardendecore.net/",
     previewUrl: "gardendecore.net",
+    liveUrl: "https://gardendecore.net/",
     accentColor: "#4ade80",
+  },
+  {
+    title: "Outreaaching Tool For SEO",
+    description:
+      "A powerful outreach tool designed to enhance SEO strategies. Built using Next.js for dynamic rendering, Python for backend processing, and leveraging the Neon Database for efficient data management. The innovative Agentic AI approach optimizes outreach campaigns, ensuring better targeting and engagement.",
+    tech: ["Next.js", "Python", "Neon Database", "Agentic AI"],
+    category: "AI Platform",
+    githubUrl: "https://github.com/hamzabhatti143/Outreach-Tool",
+    previewUrl: "outreach-tool-drab.vercel.app",
+    liveUrl: "https://outreach-tool-drab.vercel.app/",
   },
 ];
 
