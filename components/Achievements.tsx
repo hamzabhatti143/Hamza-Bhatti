@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { achievements, stats } from "@/data/portfolio";
+import type { Achievement } from "@/lib/getPortfolio";
 
-export default function Achievements() {
+export default function Achievements({
+  achievements,
+  stats,
+}: {
+  achievements: Achievement[];
+  stats: { value: string; label: string; sub: string }[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

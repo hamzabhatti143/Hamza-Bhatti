@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { personalInfo, navLinks } from "@/data/portfolio";
+import type { PersonalInfo } from "@/lib/getPortfolio";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const DownloadIcon = () => (
@@ -13,7 +13,13 @@ const DownloadIcon = () => (
   </svg>
 );
 
-export default function Navbar() {
+export default function Navbar({
+  personalInfo,
+  navLinks,
+}: {
+  personalInfo: PersonalInfo;
+  navLinks: readonly { label: string; href: string }[];
+}) {
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
   const [logoError, setLogoError] = useState(false);

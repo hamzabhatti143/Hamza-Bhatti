@@ -1,6 +1,7 @@
-import { personalInfo } from "@/data/portfolio";
+import type { PersonalInfo } from "@/lib/getPortfolio";
 
-const socialLinks = [
+function buildSocialLinks(personalInfo: PersonalInfo) {
+  return [
   {
     label: "GitHub",
     href: personalInfo.github,
@@ -39,8 +40,10 @@ const socialLinks = [
     ),
   },
 ] as const;
+}
 
-export default function Footer() {
+export default function Footer({ personalInfo }: { personalInfo: PersonalInfo }) {
+  const socialLinks = buildSocialLinks(personalInfo);
   const year = new Date().getFullYear();
 
   return (

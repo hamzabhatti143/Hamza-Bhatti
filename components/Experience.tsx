@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { experiences } from "@/data/portfolio";
+import type { Experience as ExperienceType } from "@/lib/getPortfolio";
 
 function onTiltMove(e: React.MouseEvent<HTMLElement>) {
   const el   = e.currentTarget;
@@ -18,7 +18,7 @@ function onTiltLeave(e: React.MouseEvent<HTMLElement>) {
   el.style.transform  = "perspective(800px) rotateX(0deg) rotateY(0deg)";
 }
 
-export default function Experience() {
+export default function Experience({ experiences }: { experiences: ExperienceType[] }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

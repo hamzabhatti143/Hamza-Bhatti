@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { skillCategories } from "@/data/portfolio";
+import type { SkillCategory } from "@/lib/getPortfolio";
 
-export default function Skills() {
+export default function Skills({ skillCategories }: { skillCategories: SkillCategory[] }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

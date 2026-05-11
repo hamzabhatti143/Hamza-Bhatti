@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { personalInfo } from "@/data/portfolio";
+import type { PersonalInfo } from "@/lib/getPortfolio";
 
 /* ── CSS 3D wireframe cube model ── */
 function WireframeCube({
@@ -60,7 +60,7 @@ function FloatingSphere({
   );
 }
 
-export default function Hero() {
+export default function Hero({ personalInfo }: { personalInfo: PersonalInfo }) {
   const heroRef  = useRef<HTMLElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
   const [photoError, setPhotoError] = useState(false);

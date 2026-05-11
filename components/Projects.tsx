@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { projects, personalInfo, type Project } from "@/data/portfolio";
+import type { Project, PersonalInfo } from "@/lib/getPortfolio";
 
 /* ─────────────────────────────────
    3D tilt helpers (shared)
@@ -64,11 +64,11 @@ function CopyButton({ text }: { text: string }) {
 /* ─────────────────────────────────
    TERMINAL CARD  (CLI projects)
 ───────────────────────────────── */
-function TerminalCard({ project, staggerDelay }: { project: Project; staggerDelay: string }) {
+function TerminalCard({ project, staggerDelay, index, githubFallback }: { project: Project; staggerDelay: string; index: number; githubFallback: string }) {
   const cmds       = project.cliCommands ?? ["$ node app.js", "> Running...", "> Done ✓", "> _"];
   const repoName   = project.githubUrl?.split("/").pop() ?? "project";
   const runCmd     = project.runCommand ?? "node app.js";
-  const cloneCmd   = `git clone ${project.githubUrl ?? personalInfo.github + "/" + repoName}`;
+  const cloneCmd   = `git clone ${project.githubUrl ?? githubFallback + "/" + repoName}`;
   const fullScript = `${cloneCmd}\ncd ${repoName} && npm install\n${runCmd}`;
 
   return (
@@ -88,7 +88,7 @@ function TerminalCard({ project, staggerDelay }: { project: Project; staggerDela
           bash — zsh
         </span>
         <span aria-hidden="true" className="font-mono text-[10px] text-green-900">
-          {String(projects.findIndex((p) => p.title === project.title) + 1).padStart(2, "0")}
+          {String(index + 1).padStart(2, "0")}
         </span>
       </div>
 
@@ -223,7 +223,7 @@ const categoryMeta: Record<string, { label: string; badgeClass: string; dotColor
   Tool:          { label: "Tool",        badgeClass: "text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-900/60 bg-sky-50 dark:bg-sky-950/40",                          dotColor: "#38bdf8" },
 };
 
-function WebCard({ project, staggerDelay }: { project: Project; staggerDelay: string }) {
+function WebCard({ project, staggerDelay, index }: { project: Project; staggerDelay: string; index: number }) {
   const meta   = categoryMeta[project.category] ?? categoryMeta["Web App"];
   const accent = project.accentColor ?? "#c8a96e";
   const url    = project.previewUrl ?? "localhost:3000";
@@ -251,7 +251,7 @@ function WebCard({ project, staggerDelay }: { project: Project; staggerDelay: st
           <span className="truncate">{url}</span>
         </div>
         <span aria-hidden="true" className="font-mono text-[10px] text-stone-400">
-          {String(projects.findIndex((p) => p.title === project.title) + 1).padStart(2, "0")}
+          {String(index + 1).padStart(2, "0")}
         </span>
       </div>
 
@@ -352,7 +352,13 @@ function WebCard({ project, staggerDelay }: { project: Project; staggerDelay: st
 /* ─────────────────────────────────
    MAIN SECTION
 ───────────────────────────────── */
-export default function Projects() {
+export default function Projects({
+  projects,
+  personalInfo,
+}: {
+  projects: Project[];
+  personalInfo: PersonalInfo;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -443,7 +449,7 @@ export default function Projects() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" role="list" aria-label="Web and browser-based projects">
           {webProjects.map((project, i) => (
             <div key={project.title} role="listitem" className="flex">
-              <WebCard project={project} staggerDelay={`${i * 90}ms`} />
+              <WebCard project={project} index={projects.indexOf(project)} staggerDelay={`${i * 90}ms`} />
             </div>
           ))}
         </div>
@@ -513,7 +519,7 @@ export default function Projects() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6" role="list" aria-label="CLI and terminal projects">
           {cliProjects.map((project, i) => (
             <div key={project.title} role="listitem" className="flex">
-              <TerminalCard project={project} staggerDelay={`${(webProjects.length + i) * 90}ms`} />
+              <TerminalCard project={project} index={projects.indexOf(project)} githubFallback={personalInfo.github} staggerDelay={`${(webProjects.length + i) * 90}ms`} />
             </div>
           ))}
         </div>

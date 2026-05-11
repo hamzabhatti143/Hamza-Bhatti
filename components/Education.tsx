@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { education } from "@/data/portfolio";
+import type { Education as EducationType } from "@/lib/getPortfolio";
 
-export default function Education() {
+export default function Education({ education }: { education: EducationType[] }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
