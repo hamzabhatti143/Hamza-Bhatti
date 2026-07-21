@@ -1,0 +1,104 @@
+---
+title: "How to Build a Two-Sided Marketplace with Next.js and FastAPI"
+description: "A practical, first-person walkthrough of the architecture I use to build two-sided marketplaces — Next.js on the front, FastAPI and PostgreSQL on the back, with clean separation between supply, demand, and payments."
+date: "2026-06-15"
+tags: ["Next.js", "FastAPI", "PostgreSQL", "Architecture"]
+faqs:
+  - q: "Why split the frontend and backend instead of using Next.js API routes for everything?"
+    a: >-
+      For a marketplace I want the backend to be independently deployable, testable,
+      and reusable across web and mobile clients. FastAPI gives me typed request
+      validation, background tasks, and a mature Python ecosystem for payments and
+      matching logic, while Next.js stays focused on rendering and UX.
+  - q: "How do you handle payments between two sides of the marketplace?"
+    a: >-
+      I use a payment provider that supports split payments or connected accounts
+      (like Stripe Connect). The buyer pays the platform, funds are held, and the
+      backend releases the payout to the seller once the order is marked complete —
+      all tracked in PostgreSQL with an auditable status trail.
+  - q: "How do you prevent two buyers from booking the same item at once?"
+    a: >-
+      Race conditions are handled at the database level with row-level locking and
+      transactional status checks, not in application code. I wrote a separate post
+      on exactly this pattern for booking systems.
+---
+
+If you want a two-sided marketplace that scales, put a Next.js frontend in front of a FastAPI backend with PostgreSQL as the source of truth. Keep the two sides — supply and demand — as clearly separated concerns in your data model, and treat matching and payments as backend responsibilities. That single decision is what keeps the codebase sane as the product grows.
+
+I've built variations of this stack for client work and my own products, and the same shape keeps working. Here's how I approach it.
+
+## What actually makes a marketplace "two-sided"?
+
+A two-sided marketplace has two distinct user roles that need each other: sellers who list supply, and buyers who consume it. The platform's job is discovery, trust, and transaction. In practice that means every core table needs to know which side it belongs to, and your permissions have to enforce that a seller can only touch their own listings while a buyer can only act on their own orders.
+
+I model this with a shared `users` table plus a `role` and role-specific profile tables. Keeping one identity per user — rather than separate seller and buyer accounts — means someone can be both, which is common in real marketplaces.
+
+## How do I structure the FastAPI backend?
+
+I keep the backend organized by domain, not by file type. Each domain (listings, orders, payments, users) owns its router, schema, and service logic. FastAPI's dependency injection makes auth and database sessions clean:
+
+```python
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+router = APIRouter(prefix="/listings", tags=["listings"])
+
+@router.post("/")
+def create_listing(
+    payload: ListingCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("seller")),
+):
+    listing = Listing(**payload.model_dump(), seller_id=user.id)
+    db.add(listing)
+    db.commit()
+    db.refresh(listing)
+    return listing
+```
+
+The `require_role` dependency is the whole game for a marketplace — it enforces which side of the market a caller belongs to before any business logic runs. Pydantic models validate every payload at the boundary, so the service layer never sees malformed data.
+
+## How does the Next.js frontend talk to it?
+
+I keep data fetching on the server wherever possible. In the App Router, server components fetch from FastAPI directly, so I never ship API tokens to the browser and I get fast, cacheable reads:
+
+```tsx
+async function getListings(): Promise<Listing[]> {
+  const res = await fetch(`${process.env.API_URL}/listings`, {
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) throw new Error("Failed to load listings");
+  return res.json();
+}
+
+export default async function BrowsePage() {
+  const listings = await getListings();
+  return <ListingGrid listings={listings} />;
+}
+```
+
+Mutations — creating a listing, placing an order — go through server actions or route handlers that attach the user's session token before calling FastAPI. The browser never holds long-lived credentials.
+
+## Where does the matching logic live?
+
+Matching belongs on the backend, always. Whether it's a simple filter ("show me plumbers within 10km") or something heavier, the frontend should ask a question and the backend should answer it. On one agri-tech platform I built, the matching ran as agentic AI services on the Python side, and the frontend just rendered ranked results. Keeping it server-side means I can change the algorithm, add caching, or move it to a background worker without touching the UI.
+
+For anything expensive, I compute asynchronously with FastAPI background tasks or a queue, store the result, and let the frontend poll or subscribe. Users get a responsive UI even when the work is slow.
+
+## How do I handle the transaction and trust layer?
+
+This is where marketplaces live or die. My rules:
+
+- **The database is the source of truth for state.** Order status transitions (`pending → paid → fulfilled → released`) are enforced in transactions, never inferred from the UI.
+- **Money moves through the platform.** The buyer pays the platform, funds are held, and payout to the seller happens only after the order completes. Every step is an auditable row.
+- **Concurrency is a database concern.** When inventory is limited, I use row-level locking so two buyers can't claim the same unit. That belongs in SQL, not in a JavaScript `if` statement.
+
+## What does the deployment look like?
+
+I containerize the FastAPI backend with Docker and run PostgreSQL as a managed instance so I get backups and connection pooling for free. The Next.js app deploys to a platform like Vercel and talks to the backend over HTTPS. Environment variables keep the API URL and secrets out of the bundle. Because the two apps are decoupled, I can scale them independently — the read-heavy frontend and the compute-heavy backend rarely need to grow at the same rate.
+
+## Final thoughts
+
+The stack isn't magic — Next.js, FastAPI, and PostgreSQL are boring, reliable choices, and that's the point. What makes a marketplace succeed is the discipline of keeping supply and demand cleanly separated, pushing state and concurrency into the database, and treating payments as a first-class backend concern. Get those right and the rest is just UI.
+
+If you're building something like this, take a look at [what I've built](/projects) or the [services I offer](/services) — and if you want a hand, [let's talk](/contact).

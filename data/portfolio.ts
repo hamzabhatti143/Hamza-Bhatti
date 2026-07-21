@@ -1,7 +1,7 @@
 export const personalInfo = {
   name: "Hamza Bhatti",
-  tagline: "Frontend Developer & AI-Assisted Builder",
-  bio: "I craft modern web experiences with clean code and an eye for design. Passionate about building at the intersection of frontend engineering and Agentic-AI development.",
+  tagline: "Frontend Developer & Agentic AI Developer",
+  bio: "I'm Hamza Bhatti — a Frontend Developer and Agentic AI Developer. I craft fast, modern web apps with clean code, and as an AI automation expert I build intelligent, agentic features that make products work smarter.",
   email: "mailto:bhatti3993@gmail.com",
   github: "https://github.com/hamzabhatti143",
   linkedin: "https://www.linkedin.com/in/hamzabhatti143",
@@ -18,9 +18,9 @@ export type SkillCategory = {
 export const skillCategories: SkillCategory[] = [
   { category: "Frontend", skills: ["HTML5", "CSS3", "Tailwind CSS", "Responsive Design", "WordPress"] },
   { category: "Languages", skills: ["TypeScript", "JavaScript", "Python", ".NET Core"] },
-  { category: "Frameworks & Tools", skills: ["Next.js", "Node.js", "Docker", "Git & GitHub"] },
-  { category: "AI & Modern Tech", skills: ["Agentic AI with OpenAI SDK", "Claude CLI", "Gemini CLI", "Hugging Face", "AI-Driven Development"] },
-  { category: "Concepts", skills: ["Strong Typing", "OOP", "Async Programming", "API Integration", "Microservices", "ADA Accessibility"] },
+  { category: "Frameworks & Tools", skills: ["Next.js", "FastAPI", "Node.js", "PostgreSQL", "Docker", "Git & GitHub"] },
+  { category: "AI & Modern Tech", skills: ["Agentic AI with OpenAI SDK", "RAG Systems", "Claude CLI", "Gemini CLI", "Hugging Face", "AI-Driven Development"] },
+  { category: "Concepts", skills: ["Strong Typing", "OOP", "Async Programming", "API Integration", "Microservices", "ADA Accessibility", "SEO (Technical & On-Page)"] },
   { category: "Other", skills: ["Problem Solving", "Debugging", "Code Structuring", "Basic UI/UX Understanding"] },
 ];
 

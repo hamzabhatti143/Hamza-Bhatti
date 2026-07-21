@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { PersonalInfo } from "@/lib/getPortfolio";
+import { routeLinks } from "@/lib/site";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const DownloadIcon = () => (
@@ -18,11 +21,15 @@ export default function Navbar({
   navLinks,
 }: {
   personalInfo: PersonalInfo;
-  navLinks: readonly { label: string; href: string }[];
+  // Homepage section anchors (e.g. #skills). Optional — only shown on "/".
+  navLinks?: readonly { label: string; href: string }[];
 }) {
+  const pathname = usePathname();
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
   const [logoError, setLogoError] = useState(false);
+
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -30,32 +37,37 @@ export default function Navbar({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
+  // Close the mobile drawer whenever the route changes.
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
+
+  const handleAnchorClick = (href: string) => {
     setMenuOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const isActive = (href: string) =>
+    href === "/blog" ? pathname.startsWith("/blog") : pathname === href;
 
   return (
     <header
       role="banner"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "navbar-glass" : "bg-transparent"
+        scrolled || !isHome ? "navbar-glass" : "bg-transparent"
       }`}
     >
       <nav
         aria-label="Primary navigation"
         className="max-w-6xl mx-auto px-6 md:px-10 flex items-center justify-between h-[72px]"
       >
-        {/* ── Logo ── */}
-        <a
-          href="#"
-          aria-label="Back to top"
+        {/* ── Logo → home ── */}
+        <Link
+          href="/"
+          aria-label="Hamza Bhatti — home"
           className="flex items-center gap-2.5 group"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         >
           {!logoError ? (
             <div className="relative w-9 h-9 rounded-lg overflow-hidden ring-1 ring-accent/30 group-hover:ring-accent/70 transition-all duration-300 bg-stone-800 dark:bg-transparent">
-              <Image src="/images/logo.png" alt="Hamza Bhatti logo" fill className="object-cover" onError={() => setLogoError(true)} priority />
+              <Image src="/images/logo.png" alt="Hamza Bhatti logo" fill sizes="36px" className="object-cover" onError={() => setLogoError(true)} priority />
             </div>
           ) : (
             <span className="w-9 h-9 rounded-lg bg-stone-100 dark:bg-ink-800 ring-1 ring-accent/30 group-hover:ring-accent/60 transition-all duration-300 flex items-center justify-center font-display font-bold text-accent text-lg">
@@ -65,20 +77,24 @@ export default function Navbar({
           <span className="font-display text-base font-semibold tracking-tight text-stone-900 dark:text-ink-50 group-hover:text-accent transition-colors duration-300">
             Hamza<span className="text-accent">.</span>
           </span>
-        </a>
+        </Link>
 
-        {/* ── Desktop links ── */}
-        <ul className="hidden md:flex items-center gap-8" role="list">
-          {navLinks.map((link) => (
+        {/* ── Desktop route links ── */}
+        <ul className="hidden md:flex items-center gap-7" role="list">
+          {routeLinks.map((link) => (
             <li key={link.href}>
-              <button
-                onClick={() => handleNavClick(link.href)}
-                className="font-body text-sm font-medium tracking-wide text-stone-600 dark:text-ink-300 hover:text-accent dark:hover:text-accent transition-colors duration-300 relative group focus-visible:outline-none focus-visible:text-accent"
-                aria-label={`Navigate to ${link.label} section`}
+              <Link
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`font-body text-sm font-medium tracking-wide transition-colors duration-300 relative group focus-visible:outline-none ${
+                  isActive(link.href)
+                    ? "text-accent"
+                    : "text-stone-600 dark:text-ink-300 hover:text-accent dark:hover:text-accent"
+                }`}
               >
                 {link.label}
-                <span aria-hidden="true" className="absolute -bottom-0.5 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
-              </button>
+                <span aria-hidden="true" className={`absolute -bottom-0.5 left-0 h-px bg-accent transition-all duration-300 ${isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"}`} />
+              </Link>
             </li>
           ))}
         </ul>
@@ -86,17 +102,6 @@ export default function Navbar({
         {/* ── Right CTA group ── */}
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
-
-          <a
-            href={personalInfo.resumeUrl}
-            download
-            aria-label="Download Hamza's resume as PDF"
-            className="resume-btn-glow inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium font-mono bg-accent/10 border border-accent/40 text-accent rounded hover:bg-accent/20 hover:border-accent transition-all duration-300"
-          >
-            <DownloadIcon />
-            Resume
-          </a>
-
           <a
             href={personalInfo.github}
             target="_blank"
@@ -111,7 +116,7 @@ export default function Navbar({
           </a>
         </div>
 
-        {/* ── Mobile ── */}
+        {/* ── Mobile trigger ── */}
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
           <button
@@ -132,21 +137,47 @@ export default function Navbar({
       <div
         id="mobile-menu"
         aria-hidden={!menuOpen}
-        className={`md:hidden overflow-hidden transition-all duration-500 navbar-glass ${menuOpen ? "max-h-[500px] py-4" : "max-h-0"}`}
+        className={`md:hidden overflow-hidden transition-all duration-500 navbar-glass ${menuOpen ? "max-h-[640px] py-5" : "max-h-0"}`}
       >
-        <ul className="flex flex-col items-center gap-5 px-6" role="list">
-          {navLinks.map((link) => (
+        <ul className="flex flex-col items-center gap-4 px-6" role="list">
+          {routeLinks.map((link) => (
             <li key={link.href}>
-              <button
-                onClick={() => handleNavClick(link.href)}
+              <Link
+                href={link.href}
                 tabIndex={menuOpen ? 0 : -1}
-                className="font-body text-sm font-medium tracking-widest uppercase text-stone-600 dark:text-ink-300 hover:text-accent transition-colors duration-300"
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`font-body text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${
+                  isActive(link.href) ? "text-accent" : "text-stone-600 dark:text-ink-300 hover:text-accent"
+                }`}
               >
                 {link.label}
-              </button>
+              </Link>
             </li>
           ))}
-          <li>
+
+          {/* Homepage in-page sections — only on "/" */}
+          {isHome && navLinks && navLinks.length > 0 && (
+            <>
+              <li aria-hidden="true" className="w-full flex items-center gap-3 pt-1">
+                <span className="flex-1 h-px bg-stone-200 dark:bg-ink-800" />
+                <span className="font-mono text-[10px] tracking-widest uppercase text-stone-400 dark:text-ink-600">On this page</span>
+                <span className="flex-1 h-px bg-stone-200 dark:bg-ink-800" />
+              </li>
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <button
+                    onClick={() => handleAnchorClick(link.href)}
+                    tabIndex={menuOpen ? 0 : -1}
+                    className="font-body text-xs font-medium tracking-widest uppercase text-stone-500 dark:text-ink-400 hover:text-accent transition-colors duration-300"
+                  >
+                    {link.label}
+                  </button>
+                </li>
+              ))}
+            </>
+          )}
+
+          <li className="pt-1">
             <a
               href={personalInfo.resumeUrl}
               download
@@ -155,17 +186,6 @@ export default function Navbar({
             >
               <DownloadIcon />
               Download Resume
-            </a>
-          </li>
-          <li>
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabIndex={menuOpen ? 0 : -1}
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-mono border border-stone-300 dark:border-ink-700 text-stone-600 dark:text-ink-300 rounded hover:border-accent hover:text-accent transition-all duration-300"
-            >
-              GitHub
             </a>
           </li>
         </ul>

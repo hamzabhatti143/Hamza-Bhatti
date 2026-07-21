@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 import { ThemeProvider } from "@/context/ThemeContext";
 import CursorGlow from "@/components/CursorGlow";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
-import VisitorChat from "@/components/VisitorChat";
+import DeferredVisitorChat from "@/components/DeferredVisitorChat";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -30,20 +31,59 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hamza Bhatti — Frontend Developer & AI-Assisted Builder",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Hamza Bhatti — Frontend Developer & Agentic AI Developer",
+    template: "%s — Hamza Bhatti",
+  },
   description:
-    "Portfolio of Hamza Bhatti, a frontend developer specialising in TypeScript, Next.js, and AI-assisted development.",
-  keywords: ["Hamza Bhatti", "Frontend Developer", "TypeScript", "Next.js", "AI Development", "Portfolio"],
-  authors: [{ name: "Hamza Bhatti" }],
+    "I'm Hamza Bhatti, a Frontend Developer and Agentic AI Developer based in Karachi, Pakistan. I build fast, SEO-friendly web apps with Next.js, FastAPI, and PostgreSQL, integrate AI automation with the OpenAI Agents SDK and RAG systems, and handle complete SEO — technical, on-page, and content.",
+  keywords: [
+    "Hamza Bhatti",
+    "Frontend Developer",
+    "Agentic AI Developer",
+    "AI Automation Expert",
+    "Best Frontend Developer",
+    "Next.js Developer",
+    "Full-Stack Developer",
+    "TypeScript",
+    "FastAPI",
+    "PostgreSQL",
+    "SEO Expert",
+    "Technical SEO",
+    "Web Developer Karachi",
+  ],
+  authors: [{ name: "Hamza Bhatti", url: SITE_URL }],
+  creator: "Hamza Bhatti",
+  publisher: "Hamza Bhatti",
+  category: "technology",
+  alternates: { canonical: "/" },
   icons: {
     icon: "/images/logo.png",
     shortcut: "/images/logo.png",
     apple: "/images/logo.png",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   openGraph: {
-    title: "Hamza Bhatti — Frontend Developer",
-    description: "Frontend Developer & AI-Assisted Builder crafting modern web experiences.",
+    title: "Hamza Bhatti — Frontend Developer & Agentic AI Developer",
+    description: "Frontend Developer & Agentic AI Developer building fast, AI-integrated, SEO-friendly web experiences with Next.js, FastAPI, and PostgreSQL.",
+    url: SITE_URL,
+    siteName: "Hamza Bhatti",
+    locale: "en_US",
     type: "website",
+    images: [
+      { url: "/images/profile-pic.jpeg", width: 1200, height: 630, alt: "Hamza Bhatti — Frontend Developer & Agentic AI Developer" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hamza Bhatti — Frontend Developer & Agentic AI Developer",
+    description: "Frontend Developer & Agentic AI Developer building fast, AI-integrated, SEO-friendly web experiences.",
+    images: ["/images/profile-pic.jpeg"],
   },
 };
 
@@ -61,7 +101,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="grain-overlay antialiased">
         <CursorGlow />
         <WhatsAppFloat />
-        <VisitorChat />
+        <DeferredVisitorChat />
         <ThemeProvider>
           {children}
         </ThemeProvider>

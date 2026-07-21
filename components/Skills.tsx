@@ -27,7 +27,7 @@ export default function Skills({ skillCategories }: { skillCategories: SkillCate
   }, []);
 
   return (
-    <section id="skills" ref={sectionRef} aria-labelledby="skills-heading" className="relative py-24 md:py-32 px-6 md:px-10 overflow-hidden">
+    <section id="skills" ref={sectionRef} aria-labelledby="skills-heading" className="relative py-16 md:py-24 px-6 md:px-10 overflow-hidden">
       {/* ── 3D floating decorations ── */}
       <div
         aria-hidden="true"

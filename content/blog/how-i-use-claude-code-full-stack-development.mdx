@@ -1,0 +1,92 @@
+---
+title: "How I Use Claude Code for Full-Stack Development"
+description: "The practical workflow I use to ship full-stack features faster with Claude Code — how I set up context, delegate the right tasks, review AI-written code, and keep quality high across Next.js and FastAPI."
+date: "2026-07-02"
+tags: ["AI Development", "Claude Code", "Workflow", "Productivity"]
+faqs:
+  - q: "Does using Claude Code mean the AI writes all my code?"
+    a: >-
+      No. I treat it as a fast pair programmer, not an autopilot. It drafts, refactors,
+      and explores; I make the architectural decisions, review every diff, and own the
+      result. The judgment stays with me.
+  - q: "How do you stop the AI from hallucinating APIs or breaking things?"
+    a: >-
+      Context and verification. I give it the real files and conventions to work from,
+      keep tasks small, and always run the type-checker, tests, and the app itself
+      before trusting a change. If it can't be verified, it isn't done.
+  - q: "Is AI-assisted development actually faster?"
+    a: >-
+      For the work it's suited to — boilerplate, refactors, test scaffolding, tracing
+      bugs across files — yes, noticeably. The gains come from removing the mechanical
+      typing and search, not from skipping the thinking.
+---
+
+I use Claude Code as a fast, context-aware pair programmer that handles the mechanical parts of full-stack work so I can spend my attention on architecture and product decisions. The wins come from giving it real context, delegating well-scoped tasks, and reviewing every change — not from letting it run unsupervised. Used that way, it makes me meaningfully faster across Next.js and FastAPI without lowering my standards.
+
+Here's the actual workflow I've settled into after using it on real projects.
+
+## What do I actually delegate to it?
+
+The best tasks to hand off are the ones that are tedious but well-defined. In my day-to-day that's:
+
+- Scaffolding a new route, component, or FastAPI endpoint that follows an existing pattern
+- Refactoring across many files — renaming, extracting a hook, changing a function signature everywhere it's used
+- Writing tests for code that already works
+- Tracing a bug through an unfamiliar part of the codebase
+- Converting a rough idea into a first draft I can then shape
+
+What I don't delegate is the thinking that decides the shape of the system: data models, API contracts, where state lives, how concurrency is handled. Those are mine. The AI is great at execution and search; I keep the judgment.
+
+## How do I set up context so the output is good?
+
+The single biggest lever on quality is context. If I ask for a change with no reference, I get generic code that ignores my conventions. If I point it at the real files, it matches the codebase. So I always start by letting it read the relevant modules — the component it's editing, the data layer it calls, a sibling file that shows the house style.
+
+I also keep a short project instructions file that captures the non-obvious rules: which package manager to use, how we name things, that we prefer server components, that database concurrency goes through row-level locks. That file means I don't repeat myself, and every task starts from the same shared understanding.
+
+## How do I keep tasks small enough to trust?
+
+I break work into changes I can review in one sitting. A good unit is "add validation to this endpoint" or "extract this logic into a hook" — not "build the whole billing system." Small tasks have three advantages: the output is more accurate because the scope is clear, the diff is reviewable, and when something's wrong I know exactly where to look.
+
+When a feature is genuinely large, I plan it first — sometimes with the AI, listing the files and steps — and then execute one step at a time, checking in between. It's the same discipline as good commits: small, coherent, verifiable.
+
+## How do I review AI-written code?
+
+I read every line as if a junior developer wrote it and I'm accountable for it — because I am. My review checklist is the same one I'd apply to any pull request:
+
+```text
+- Does it actually solve the problem, or just look like it?
+- Does it match our patterns and naming?
+- Are edge cases and errors handled?
+- Any security issues — unvalidated input, leaked secrets, missing auth?
+- Is there a simpler version?
+```
+
+Then I verify by running things, not by vibes. Type-checker, tests, and the app itself:
+
+```bash
+npm run type-check
+npm run test
+npm run build
+```
+
+If a change can't be demonstrated working, it isn't finished. The AI writing plausible code is not the same as the code being correct, and closing that gap is my job.
+
+## A concrete example
+
+Recently I needed to add typed validation and error handling to a batch of FastAPI endpoints that had grown organically. I pointed Claude Code at one already-clean endpoint as the template and asked it to bring the rest in line — Pydantic models on every payload, consistent `HTTPException` responses, the same dependency-injected auth.
+
+It produced the diffs across a dozen files in minutes. I read each one, fixed two spots where it had guessed a field type wrong, ran the test suite, and shipped. That's maybe an hour of tedious work compressed into fifteen minutes — and crucially, I still understood and owned every line.
+
+## What are the failure modes to watch for?
+
+Three things bite people who lean on AI tools too hard:
+
+1. **Accepting code you don't understand.** If you can't explain why it works, you can't maintain it. Slow down and read.
+2. **Skipping verification.** Confident, wrong code is the whole risk. Always run it.
+3. **Over-delegating design.** Let it draft implementations, but keep the architecture in your own head. A pile of locally-reasonable changes can still add up to an incoherent system.
+
+## Final thoughts
+
+Claude Code didn't replace my judgment; it removed the friction around it. I still decide what to build and how it should be shaped — I just spend less time typing boilerplate and grepping across files to get there. The developers who get the most from these tools are the ones who stay firmly in the loop: clear context, small tasks, real verification, full ownership.
+
+This AI-assisted workflow is part of how I ship [client projects](/services) quickly without cutting corners. If that's the kind of pace and quality you're after, [let's talk](/contact).

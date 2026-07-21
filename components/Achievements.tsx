@@ -37,7 +37,7 @@ export default function Achievements({
       id="achievements"
       ref={sectionRef}
       aria-labelledby="achievements-heading"
-      className="relative py-24 md:py-32 px-6 md:px-10 overflow-hidden"
+      className="relative py-16 md:py-24 px-6 md:px-10 overflow-hidden"
     >
       {/* ── 3D floating decorations ── */}
       <div

@@ -1,0 +1,48 @@
+# Hamza Bhatti
+
+I'm Hamza Bhatti, a Frontend Developer and Agentic AI Developer based in Karachi,
+Pakistan. I'm a full-stack developer with a frontend-leaning background and hands-on
+SEO expertise — technical, on-page, and content, not just the technical side. I build
+fast, accessible web applications and integrate AI into them using the OpenAI Agents
+SDK and RAG systems.
+
+## Core Stack
+
+- **Next.js** — App Router, server components, and static/SSR rendering
+- **FastAPI** — Python backends and Agentic-AI services
+- **PostgreSQL** — relational data modeling and persistence
+- **TypeScript** — strongly-typed, maintainable application code
+- **Tailwind CSS** — responsive, utility-first UI
+
+## Key Pages
+
+- Home: https://hamza-bhatti.vercel.app/
+- About: https://hamza-bhatti.vercel.app/about
+- Projects: https://hamza-bhatti.vercel.app/projects
+- Blog: https://hamza-bhatti.vercel.app/blog
+- Services: https://hamza-bhatti.vercel.app/services
+- Resume: https://hamza-bhatti.vercel.app/resume
+- Contact: https://hamza-bhatti.vercel.app/contact
+
+## Services I Offer
+
+- Full-Stack Web Development (Next.js + FastAPI)
+- AI-Integrated Applications (agentic AI, RAG chatbots, automation)
+- Complete SEO (technical, on-page & content audits and optimization)
+- WordPress Development
+
+## Links
+
+- GitHub: https://github.com/hamzabhatti143
+- LinkedIn: https://www.linkedin.com/in/hamzabhatti143
+- Email: bhatti3993@gmail.com
+
+## Skills
+
+- Frontend: Next.js, React, Tailwind CSS, responsive & accessible UI
+- Languages: TypeScript, JavaScript, Python, .NET Core
+- Backend & Tools: FastAPI, Node.js, PostgreSQL, Docker, Git & GitHub
+- AI & Modern Tech: Agentic AI with the OpenAI Agents SDK, RAG systems, Hugging Face,
+  Claude & Gemini CLIs, AI-driven development
+- Concepts: strong typing, OOP, async programming, API integration, microservices,
+  and ADA accessibility

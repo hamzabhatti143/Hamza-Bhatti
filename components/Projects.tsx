@@ -385,7 +385,7 @@ export default function Projects({
       id="projects"
       ref={sectionRef}
       aria-labelledby="projects-heading"
-      className="relative py-24 md:py-32 px-6 md:px-10 bg-stone-100/60 dark:bg-ink-950/60 overflow-hidden"
+      className="relative py-16 md:py-24 px-6 md:px-10 bg-stone-100/60 dark:bg-ink-950/60 overflow-hidden"
     >
       {/* ── 3D floating decorations ── */}
       <div

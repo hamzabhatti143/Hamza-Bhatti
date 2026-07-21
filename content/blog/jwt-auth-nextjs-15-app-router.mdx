@@ -1,0 +1,126 @@
+---
+title: "JWT Auth in Next.js 15 App Router: A Practical Guide"
+description: "A hands-on guide to JWT authentication in the Next.js 15 App Router — issuing tokens, storing them in httpOnly cookies, verifying in middleware and server components, and the security details that actually matter."
+date: "2026-04-10"
+tags: ["Next.js", "Authentication", "Security", "TypeScript"]
+faqs:
+  - q: "Should I store the JWT in localStorage or a cookie?"
+    a: >-
+      Use an httpOnly, secure cookie. localStorage is readable by any JavaScript on the
+      page, which makes it a prime target for XSS token theft. An httpOnly cookie can't
+      be read by client scripts and is sent automatically with requests.
+  - q: "Do I verify the JWT in middleware or in server components?"
+    a: >-
+      Both, for different jobs. Middleware does a fast check to gate routes and redirect
+      unauthenticated users. Server components and route handlers do the authoritative
+      verification before returning data or performing actions, because middleware runs
+      on the edge and shouldn't be your only line of defense.
+  - q: "How do I handle token expiry without logging users out constantly?"
+    a: >-
+      Use a short-lived access token plus a longer-lived refresh token stored as a
+      separate httpOnly cookie. When the access token expires, a refresh endpoint issues
+      a new one. Keep refresh tokens revocable server-side so you can invalidate sessions.
+---
+
+For JWT auth in the Next.js 15 App Router, issue a signed token on login, store it in an httpOnly secure cookie, gate routes with middleware, and do the authoritative verification inside server components and route handlers. Never put the token in localStorage, and never trust the client to tell you who it is. Get those pieces right and you have auth that's both smooth and hard to abuse.
+
+I've wired this up more than once, so here's the version I'd hand to my past self.
+
+## How do I issue the token on login?
+
+When a user signs in, I verify their credentials, then sign a JWT with a small payload — just enough to identify them — and set it as an httpOnly cookie. I use the `jose` library because it works in both the Node and edge runtimes, which matters when middleware runs on the edge:
+
+```ts
+import { SignJWT } from "jose";
+import { cookies } from "next/headers";
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+
+export async function createSession(userId: string) {
+  const token = await new SignJWT({ sub: userId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("15m")
+    .sign(secret);
+
+  const cookieStore = await cookies();
+  cookieStore.set("session", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 15,
+  });
+}
+```
+
+The cookie flags are the security. `httpOnly` keeps JavaScript from reading it, `secure` forces HTTPS in production, and `sameSite: "lax"` blocks most CSRF while still allowing top-level navigation.
+
+## How do I gate routes with middleware?
+
+Middleware is my first checkpoint. It runs before the request reaches a page, so it's the right place to redirect unauthenticated users away from protected routes. I keep it lightweight — verify the token's signature and expiry, and bounce if it's missing or invalid:
+
+```ts
+import { NextResponse, type NextRequest } from "next/server";
+import { jwtVerify } from "jose";
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get("session")?.value;
+
+  try {
+    if (!token) throw new Error("no session");
+    await jwtVerify(token, secret);
+    return NextResponse.next();
+  } catch {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+}
+
+export const config = { matcher: ["/dashboard/:path*", "/account/:path*"] };
+```
+
+The `matcher` keeps middleware off public routes so it only runs where it's needed.
+
+## Why verify again in server components?
+
+Middleware is a gate, not a guarantee. It runs on the edge, it's easy to misconfigure a matcher, and it shouldn't be the only thing standing between a user and their data. So in any server component or route handler that returns sensitive data, I verify the token again and derive the user from it — never from a client-supplied header or prop:
+
+```ts
+import { cookies } from "next/headers";
+import { jwtVerify } from "jose";
+
+export async function getCurrentUser() {
+  const token = (await cookies()).get("session")?.value;
+  if (!token) return null;
+
+  try {
+    const { payload } = await jwtVerify(token, secret);
+    return { id: payload.sub as string };
+  } catch {
+    return null;
+  }
+}
+```
+
+Now data fetching is authoritative. If the token is missing, expired, or tampered with, `getCurrentUser` returns null and the component renders the unauthenticated state.
+
+## How do I handle expiry and refresh?
+
+Short access tokens are safer but log people out if you're naive about it. The standard fix is two tokens: a short-lived access token (15 minutes) and a longer-lived refresh token stored as its own httpOnly cookie. When the access token expires, the client hits a refresh route that checks the refresh token and mints a new access token.
+
+The important part is that refresh tokens must be **revocable**. I store a reference to each refresh token (or a session record) server-side, so logging out or a security event can invalidate it immediately. A JWT you can't revoke is a liability the moment it leaks.
+
+## What are the mistakes I see most often?
+
+- **Token in localStorage.** It's readable by any script, so one XSS bug hands attackers a valid session. Use httpOnly cookies.
+- **Trusting the payload for authorization without re-verifying the signature.** Anyone can base64-decode a JWT; only signature verification proves it's genuine.
+- **Putting sensitive data in the token.** JWTs are signed, not encrypted. Keep the payload to identifiers.
+- **No CSRF consideration.** With cookie-based auth, pair `sameSite` with CSRF protection on state-changing routes.
+
+## Final thoughts
+
+JWT auth in the App Router isn't complicated once you assign each layer its job: cookies for safe storage, middleware for fast gating, server-side verification for the real decision, and a refresh flow for a smooth session. The theme running through all of it is simple — never trust the client to tell you who it is; make the server prove it every time.
+
+Security details like these are the difference between a demo and a production app, and they're what I focus on when I [build for clients](/services). If you need auth done right, [reach out](/contact).

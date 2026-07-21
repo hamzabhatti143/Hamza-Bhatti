@@ -1,0 +1,124 @@
+---
+title: "Technical SEO Checklist for Developers"
+description: "A developer-focused technical SEO checklist I actually use — crawlability, indexing, Core Web Vitals, structured data, metadata, and the small implementation details that decide whether your site gets found."
+date: "2026-03-05"
+tags: ["Technical SEO", "Performance", "Next.js", "Web"]
+faqs:
+  - q: "Is technical SEO still worth it if my content is good?"
+    a: >-
+      Yes. Great content that search engines can't crawl, index, or render fast simply
+      doesn't rank. Technical SEO is the foundation that lets your content compete — it
+      doesn't replace good content, it unlocks it.
+  - q: "How much does site speed really affect SEO?"
+    a: >-
+      Core Web Vitals are a confirmed ranking signal, and speed heavily affects the user
+      experience metrics Google measures. Beyond rankings, faster sites convert better,
+      so the payoff is double. Aim to keep LCP under 2.5 seconds.
+  - q: "Do I need structured data (JSON-LD) on every page?"
+    a: >-
+      Not every page, but the ones where it applies — articles, products, FAQs, profiles,
+      breadcrumbs. Structured data helps search engines understand your content and can
+      earn rich results, which improve click-through even at the same ranking position.
+---
+
+Technical SEO is the part of SEO that developers own: making sure search engines can crawl, render, index, and understand your site quickly. You don't need to be a marketer to get it right — you need to treat crawlability, performance, and structured data as engineering requirements. Here's the checklist I run through on every project, in the order that matters.
+
+This is the hybrid skill most developers skip, and it's one of the most valuable things I bring to a build.
+
+## Can search engines crawl and index the site?
+
+Nothing else matters if crawlers can't reach your pages. My first checks:
+
+- **`robots.txt` allows what should be public** and blocks only what shouldn't (API routes, admin). Don't accidentally disallow your whole site — it happens more than you'd think.
+- **An XML sitemap exists and lists real, canonical URLs.** In Next.js I generate it dynamically so it never goes stale:
+
+```ts
+import type { MetadataRoute } from "next";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const base = "https://example.com";
+  return [
+    { url: base, priority: 1.0, changeFrequency: "weekly" },
+    { url: `${base}/blog`, priority: 0.8, changeFrequency: "weekly" },
+  ];
+}
+```
+
+- **No accidental `noindex`.** A stray `noindex` meta tag or header left over from staging will quietly delete you from search results.
+- **Canonical URLs are set** so duplicate paths (trailing slashes, query params) don't split ranking signals.
+
+## Does the page render its content without JavaScript?
+
+Search engines render JavaScript, but relying on client-side rendering for your primary content is a gamble — it's slower to index and fragile. I render meaningful content on the server. In the App Router that's the default with server components, which is a big reason I reach for it. If a crawler needs to execute a pile of JS to see your headline, you've added risk for no benefit.
+
+## Is the metadata correct on every route?
+
+Each page needs a unique, descriptive title and meta description. Next.js makes this clean with the metadata API and templates:
+
+```ts
+export const metadata = {
+  metadataBase: new URL("https://example.com"),
+  title: { default: "Site Name", template: "%s — Site Name" },
+  description: "A clear, human description under ~155 characters.",
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", url: "https://example.com" },
+};
+```
+
+Per-page titles and descriptions do real work: they're often what shows in the search result, so they drive click-through. Open Graph and Twitter tags control how links look when shared, which affects traffic from social too.
+
+## Are Core Web Vitals in the green?
+
+Core Web Vitals are a ranking signal and a direct proxy for user experience. The three I watch:
+
+- **LCP (Largest Contentful Paint) under 2.5s** — usually the hero image or headline. Prioritize loading the LCP element, use `next/image` with correct dimensions, and don't lazy-load it.
+- **CLS (Cumulative Layout Shift) under 0.1** — reserve space for images, ads, and late-loading UI so nothing jumps. Always set width and height.
+- **INP (Interaction to Next Paint)** — keep the main thread free by shipping less JavaScript and deferring non-critical scripts.
+
+Practical wins: serve modern image formats at the right size, use `next/font` so fonts don't block or shift, lazy-load below-the-fold widgets (a chatbot doesn't need to load before the hero), and delete unused dependencies. Speed is mostly a discipline of shipping less.
+
+## Is the content structured for machines?
+
+Structured data (JSON-LD) tells search engines what a page *is*, not just what it says. I add the schema that fits each page type — `Article` on blog posts, `FAQPage` on FAQs, `Person` on an about page, `BreadcrumbList` for navigation. It's cheap to add and can earn rich results that lift click-through:
+
+```tsx
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: post.title,
+      datePublished: post.date,
+      author: { "@type": "Person", name: "Your Name" },
+    }),
+  }}
+/>
+```
+
+Beyond JSON-LD, use semantic HTML — one `h1` per page, a logical heading order, real `nav`, `article`, and `main` landmarks. Semantic markup helps crawlers and screen readers alike.
+
+## Do the internal links make sense?
+
+Internal linking spreads ranking signal and helps crawlers discover pages. I make sure important pages are reachable within a couple of clicks, use descriptive anchor text (not "click here"), and link related content to each other — a blog post to the relevant service, a service to proof-of-work projects. A well-linked site is easier to crawl and easier to navigate.
+
+## The quick checklist
+
+```text
+[ ] robots.txt correct, sitemap.xml generated
+[ ] No stray noindex; canonicals set
+[ ] Primary content server-rendered
+[ ] Unique title + description per route
+[ ] LCP < 2.5s, CLS < 0.1, minimal JS
+[ ] next/image + next/font used correctly
+[ ] JSON-LD on articles, FAQs, profiles
+[ ] Semantic HTML, one h1, logical headings
+[ ] Descriptive internal links between pages
+[ ] Mobile responsive, no horizontal scroll
+```
+
+## Final thoughts
+
+Technical SEO isn't a dark art — it's a set of engineering standards that make your site fast, crawlable, and understandable. Developers are the ones who can actually implement it, which is exactly why having it in your skillset is such an advantage. I fold this checklist into every build so the things I ship don't just work, they get found.
+
+If you want a site that's fast and discoverable from day one, that's a core part of [what I offer](/services) — [let's talk](/contact).

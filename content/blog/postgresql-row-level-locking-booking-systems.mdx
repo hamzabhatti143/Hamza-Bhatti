@@ -1,0 +1,120 @@
+---
+title: "Row-Level Locking in PostgreSQL: Preventing Race Conditions in Booking Systems"
+description: "How I use PostgreSQL row-level locking — SELECT FOR UPDATE and friends — to stop double-bookings and race conditions in booking and inventory systems, with real SQL you can drop into a transaction."
+date: "2026-05-20"
+tags: ["PostgreSQL", "Concurrency", "Backend", "SQL"]
+faqs:
+  - q: "What is the difference between SELECT FOR UPDATE and SELECT FOR SHARE?"
+    a: >-
+      SELECT FOR UPDATE takes an exclusive lock on the selected rows so no other
+      transaction can update, delete, or re-lock them until you commit. SELECT FOR
+      SHARE takes a shared lock that blocks writers but allows other readers to also
+      take a share lock. For bookings you almost always want FOR UPDATE.
+  - q: "Does row-level locking hurt performance?"
+    a: >-
+      Only if you lock too much or hold locks too long. Lock the smallest set of rows
+      you need, keep the transaction short, and commit quickly. When done right the
+      overhead is negligible and far cheaper than the customer-support cost of a
+      double-booking.
+  - q: "Can I use row-level locking with an ORM like SQLAlchemy or Prisma?"
+    a: >-
+      Yes. SQLAlchemy exposes it via with_for_update() on a query inside a
+      transaction, and Prisma supports it through interactive transactions with raw
+      SELECT ... FOR UPDATE. The database does the real work; the ORM just issues the
+      statement.
+---
+
+If two people try to book the last available slot at the same moment, plain application code will happily sell it twice. The fix is row-level locking in PostgreSQL: wrap the availability check and the write in a single transaction and use `SELECT ... FOR UPDATE` so the second request waits for the first to finish. The database becomes the referee, and double-bookings disappear.
+
+I've hit this problem in real booking flows, and every time the durable solution lived in SQL, not in the app layer. Here's how I reason about it.
+
+## Why do race conditions happen in the first place?
+
+A race condition shows up whenever two requests read the same state, both decide they're allowed to proceed, and both write. The classic booking bug looks like this in pseudo-code:
+
+```text
+1. Read slot -> status is "available"
+2. (another request also reads "available")
+3. Mark slot "booked"
+4. (the other request also marks it "booked")
+```
+
+Both requests passed the check because they read before either wrote. No amount of clever JavaScript fixes this reliably, because the gap between "read" and "write" is where the danger lives. You need the database to serialize access to that specific row.
+
+## How does SELECT FOR UPDATE solve it?
+
+`SELECT ... FOR UPDATE` locks the rows it returns until the surrounding transaction commits or rolls back. Any other transaction that tries to lock the same rows blocks and waits. That turns the read-check-write sequence into an atomic, serialized operation:
+
+```sql
+BEGIN;
+
+SELECT id, status
+FROM slots
+WHERE id = $1
+FOR UPDATE;
+
+-- Only one transaction can be here for this row at a time.
+UPDATE slots
+SET status = 'booked', booked_by = $2
+WHERE id = $1 AND status = 'available';
+
+COMMIT;
+```
+
+The second concurrent request waits at the `SELECT ... FOR UPDATE` until the first commits. By the time it proceeds, the row already says `booked`, the `UPDATE` matches zero rows, and I know to reject the request. No double-booking is possible.
+
+## What does this look like in a real backend?
+
+In a FastAPI service with SQLAlchemy, I express the same idea with `with_for_update()` inside a transaction:
+
+```python
+def book_slot(db: Session, slot_id: int, user_id: int) -> bool:
+    slot = (
+        db.query(Slot)
+        .filter(Slot.id == slot_id)
+        .with_for_update()      # SELECT ... FOR UPDATE
+        .one()
+    )
+    if slot.status != "available":
+        return False            # someone got here first
+
+    slot.status = "booked"
+    slot.booked_by = user_id
+    db.commit()
+    return True
+```
+
+The key detail: the lock is only meaningful inside a transaction, and the transaction must stay open from the locking `SELECT` through the `UPDATE` and `COMMIT`. If you read, close the transaction, and then write in a new one, the lock is gone and the bug is back.
+
+## How do I avoid locking too much?
+
+Row-level locking is precise, but it's easy to accidentally lock more than you need. My guidelines:
+
+- **Lock by primary key when you can.** `WHERE id = $1 FOR UPDATE` locks exactly one row.
+- **Keep transactions short.** Do the check and the write, then commit. Never hold a lock across a network call or a slow computation.
+- **Order your locks consistently.** If a transaction locks multiple rows, always acquire them in the same order (for example, ascending ID) to avoid deadlocks.
+
+## What about SKIP LOCKED for queues and pools?
+
+When I'm handing out units from a pool — think "grab any available seat" rather than "book seat 14" — `FOR UPDATE SKIP LOCKED` is the tool. Instead of waiting on a locked row, each transaction simply skips it and takes the next free one:
+
+```sql
+SELECT id
+FROM seats
+WHERE event_id = $1 AND status = 'available'
+ORDER BY id
+FOR UPDATE SKIP LOCKED
+LIMIT 1;
+```
+
+This lets many workers claim different rows in parallel with no contention, which is perfect for job queues and seat pools. Each caller gets a distinct row, and nobody blocks.
+
+## When should I reach for something heavier?
+
+For most booking systems, `SELECT FOR UPDATE` inside a short transaction is all you need. If you're coordinating across multiple services or databases, you might add an advisory lock (`pg_advisory_xact_lock`) for a named critical section, or step up to `SERIALIZABLE` isolation and retry on serialization failures. But I reach for those only when the simple row lock genuinely can't express the constraint — which is rare.
+
+## Final thoughts
+
+Concurrency bugs are the ones that don't show up in testing and then ruin a launch day. The reliable fix is to stop trusting application code to serialize access and let PostgreSQL do it. Wrap your check and write in one transaction, lock the row you care about with `FOR UPDATE`, and use `SKIP LOCKED` when you're handing out from a pool.
+
+This is exactly the kind of backend detail I sweat when I build [full-stack apps](/services). If you've got a booking or inventory flow that needs to be bulletproof, [get in touch](/contact).

@@ -1,4 +1,6 @@
+import Link from "next/link";
 import type { PersonalInfo } from "@/lib/getPortfolio";
+import { routeLinks } from "@/lib/site";
 
 function buildSocialLinks(personalInfo: PersonalInfo) {
   return [
@@ -79,6 +81,24 @@ export default function Footer({ personalInfo }: { personalInfo: PersonalInfo })
           </a>
         </div>
       </div>
+
+      {/* Route navigation */}
+      <nav aria-label="Footer navigation" className="py-8 px-6 md:px-10 border-t border-stone-100 dark:border-ink-900">
+        <ul className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-x-8 gap-y-3" role="list">
+          <li>
+            <Link href="/" className="font-body text-sm text-stone-500 dark:text-ink-400 hover:text-accent transition-colors duration-300">
+              Home
+            </Link>
+          </li>
+          {routeLinks.map((link) => (
+            <li key={link.href}>
+              <Link href={link.href} className="font-body text-sm text-stone-500 dark:text-ink-400 hover:text-accent transition-colors duration-300">
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {/* Bottom bar */}
       <div className="py-8 px-6 md:px-10 border-t border-stone-100 dark:border-ink-900">
