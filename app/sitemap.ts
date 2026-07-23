@@ -6,14 +6,19 @@ import { SITE_URL } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
+  // Resume was rewritten with unique metadata, headings, profile copy, and a
+  // page-specific CTA to resolve a "Crawled - currently not indexed" issue.
+  // Pin its lastmod so Google sees a concrete change date for the update.
+  const resumeUpdated = new Date("2026-07-23");
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/`,         lastModified: now, changeFrequency: "weekly",  priority: 1.0 },
-    { url: `${SITE_URL}/about`,    lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/projects`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${SITE_URL}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${SITE_URL}/resume`,   lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/contact`,  lastModified: now, changeFrequency: "yearly",  priority: 0.6 },
-    { url: `${SITE_URL}/blog`,     lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${SITE_URL}/`,         lastModified: now,           changeFrequency: "weekly",  priority: 1.0 },
+    { url: `${SITE_URL}/about`,    lastModified: now,           changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/projects`, lastModified: now,           changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE_URL}/services`, lastModified: now,           changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE_URL}/resume`,   lastModified: resumeUpdated, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/contact`,  lastModified: now,           changeFrequency: "yearly",  priority: 0.6 },
+    { url: `${SITE_URL}/blog`,     lastModified: now,           changeFrequency: "weekly",  priority: 0.8 },
   ];
 
   const postRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({

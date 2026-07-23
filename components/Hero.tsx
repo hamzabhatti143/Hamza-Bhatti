@@ -278,7 +278,7 @@ export default function Hero({ personalInfo }: { personalInfo: PersonalInfo }) {
                 <span className="font-mono text-xs text-stone-700 dark:text-ink-300">Next.js</span>
               </div>
               <div className="float-tag-3d absolute top-6 -left-6 px-3 py-1.5 rounded-lg border border-purple-200 dark:border-purple-800/60 bg-purple-50/80 dark:bg-purple-950/50 backdrop-blur-sm" style={{ transform: "translateZ(45px)" }} aria-hidden="true">
-                <span className="font-mono text-xs text-purple-600 dark:text-purple-400">AI Builder</span>
+                <span className="font-mono text-xs text-purple-600 dark:text-purple-400">Agentic AI</span>
               </div>
               <div className="float-tag-3d absolute -bottom-1 -right-10 px-3 py-1.5 rounded-lg border border-sky-200 dark:border-sky-800/60 bg-sky-50/80 dark:bg-sky-950/50 backdrop-blur-sm" style={{ transform: "translateZ(40px)" }} aria-hidden="true">
                 <span className="font-mono text-xs text-sky-600 dark:text-sky-400">Tailwind</span>
@@ -349,7 +349,7 @@ export default function Hero({ personalInfo }: { personalInfo: PersonalInfo }) {
               <span className="font-mono text-[10px] text-stone-700 dark:text-ink-300">Next.js</span>
             </div>
             <div className="float-tag-3d absolute top-4 -left-5 px-2.5 py-1 rounded-lg border border-purple-200 dark:border-purple-800/60 bg-purple-50/80 dark:bg-purple-950/50 backdrop-blur-sm" style={{ transform: "translateZ(28px)" }} aria-hidden="true">
-              <span className="font-mono text-[10px] text-purple-600 dark:text-purple-400">AI Builder</span>
+              <span className="font-mono text-[10px] text-purple-600 dark:text-purple-400">Agentic AI</span>
             </div>
           </div>
         </div>

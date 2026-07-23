@@ -5,9 +5,9 @@ import { getPortfolio } from "@/lib/getPortfolio";
 import { SITE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Resume",
+  title: "Hamza Bhatti — CV & Career History",
   description:
-    "The resume of Hamza Bhatti — full-stack developer and Agentic AI developer. Skills, experience, projects, education, and achievements in Next.js, FastAPI, PostgreSQL, and AI.",
+    "A recruiter-ready CV for Hamza Bhatti: three-plus years shipping typed full-stack products and production AI agents, a downloadable PDF, and the hiring context behind each role, credential, and shipped build.",
   alternates: { canonical: "/resume" },
 };
 
@@ -51,7 +51,19 @@ export default async function ResumePage() {
   };
 
   return (
-    <PageFrame>
+    <PageFrame
+      footerCta={{
+        eyebrow: "Hiring?",
+        title: (
+          <>
+            Let&apos;s talk about the{" "}
+            <span className="italic text-accent font-normal">role.</span>
+          </>
+        ),
+        text: "Have the PDF in hand? Tell me about the position and I'll walk you through the parts of my background that fit.",
+        buttonLabel: "Email me about a role",
+      }}
+    >
       <JsonLd data={profileSchema} />
 
       <section className="max-w-4xl mx-auto px-6 md:px-10 pt-32 pb-20 md:pt-40 md:pb-28">
@@ -79,22 +91,46 @@ export default async function ResumePage() {
           </a>
         </div>
 
-        {/* Summary */}
+        {/* Professional profile */}
         <section className="mb-14">
-          <SectionTitle>Summary</SectionTitle>
-          <p className="font-body text-base md:text-lg text-stone-600 dark:text-ink-300 leading-relaxed">
-            I&apos;m a full-stack developer with a frontend-leaning background and
-            complete SEO expertise — technical, on-page, and content. I build fast,
-            accessible web applications with
-            Next.js, FastAPI, and PostgreSQL, and I integrate AI — agentic systems and
-            RAG chatbots — using the OpenAI Agents SDK. I care about clean, typed code,
-            measurable performance, and shipping products that get used and get found.
-          </p>
+          <SectionTitle>Professional Profile</SectionTitle>
+          <div className="space-y-5 font-body text-base md:text-lg text-stone-600 dark:text-ink-300 leading-relaxed max-w-3xl">
+            <p>
+              This page is the condensed, hiring-focused version of my work — the same
+              story a recruiter or engineering manager needs in about ninety seconds,
+              paired with a downloadable PDF that drops cleanly into an applicant-tracking
+              system. I&apos;m a full-stack engineer based in Karachi who ships in
+              production rather than in prototypes: over the past three years my client
+              and personal projects have gone live, stayed live, and been handed over to
+              the people who now maintain them. Every entry below maps to something real
+              you can click through to, not a line written to fill space.
+            </p>
+            <p>
+              In practice that means I own a feature from the database schema all the way
+              to the rendered pixel. On a typical engagement I model the data in
+              PostgreSQL, expose it through a typed FastAPI service, and consume it from a
+              Next.js App Router frontend tuned to score well on Core Web Vitals. Where it
+              genuinely earns its place, I layer in AI — retrieval-augmented chatbots and
+              multi-step agents built on the OpenAI Agents SDK — and then wire in the
+              analytics and structured metadata that let the finished product actually get
+              found by the people it was built for.
+            </p>
+            <p>
+              What tends to matter to the teams I join is that I close the loop between
+              engineering and outcomes: I can build the thing and then explain, in a
+              standup or a client call, why it moves a number that the business cares
+              about. The sections that follow expand this summary into specifics — the
+              stacks I reach for first, the roles and responsibilities I&apos;ve held, the
+              projects I point to as proof of work, and the formal education and
+              certifications behind them. If a single line here raises a question, the
+              contact page is the fastest route to a straight answer.
+            </p>
+          </div>
         </section>
 
         {/* Skills */}
         <section className="mb-14">
-          <SectionTitle>Skills</SectionTitle>
+          <SectionTitle>Technical Toolkit</SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {skillCategories.map((cat) => (
               <div key={cat.category}>
@@ -115,7 +151,7 @@ export default async function ResumePage() {
 
         {/* Experience */}
         <section className="mb-14">
-          <SectionTitle>Experience</SectionTitle>
+          <SectionTitle>Career History</SectionTitle>
           <div className="space-y-8">
             {experiences.map((exp) => (
               <article key={`${exp.company}-${exp.role}`}>
@@ -139,7 +175,7 @@ export default async function ResumePage() {
 
         {/* Projects */}
         <section className="mb-14">
-          <SectionTitle>Selected Projects</SectionTitle>
+          <SectionTitle>Flagship Builds</SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {featured.map((project) => (
               <article key={project.title} className="rounded-lg border border-stone-200 dark:border-ink-800 p-5">
@@ -159,7 +195,7 @@ export default async function ResumePage() {
 
         {/* Education */}
         <section className="mb-14">
-          <SectionTitle>Education</SectionTitle>
+          <SectionTitle>Academic Background</SectionTitle>
           <div className="space-y-6">
             {education.map((edu) => (
               <article key={edu.degree}>
@@ -173,7 +209,7 @@ export default async function ResumePage() {
 
         {/* Achievements */}
         <section>
-          <SectionTitle>Achievements &amp; Certifications</SectionTitle>
+          <SectionTitle>Credentials &amp; Recognition</SectionTitle>
           <ul className="space-y-3" role="list">
             {achievements.map((a) => (
               <li key={a.title} className="flex items-start gap-3">

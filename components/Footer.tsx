@@ -44,7 +44,22 @@ function buildSocialLinks(personalInfo: PersonalInfo) {
 ] as const;
 }
 
-export default function Footer({ personalInfo }: { personalInfo: PersonalInfo }) {
+// Lets an individual route override the shared CTA band so the same headline
+// isn't repeated verbatim on every page (helps avoid thin/duplicate content).
+export type FooterCta = {
+  eyebrow?: string;
+  title?: React.ReactNode;
+  text?: string;
+  buttonLabel?: string;
+};
+
+export default function Footer({
+  personalInfo,
+  cta,
+}: {
+  personalInfo: PersonalInfo;
+  cta?: FooterCta;
+}) {
   const socialLinks = buildSocialLinks(personalInfo);
   const year = new Date().getFullYear();
 
@@ -55,17 +70,22 @@ export default function Footer({ personalInfo }: { personalInfo: PersonalInfo })
         <div className="max-w-6xl mx-auto text-center">
           <p className="font-mono text-xs tracking-[0.3em] uppercase text-accent mb-6 flex items-center justify-center gap-3">
             <span aria-hidden="true" className="inline-block w-8 h-px bg-accent opacity-70" />
-            Get in touch
+            {cta?.eyebrow ?? "Get in touch"}
             <span aria-hidden="true" className="inline-block w-8 h-px bg-accent opacity-70" />
           </p>
 
           <h2 className="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-ink-50 mb-6 leading-tight">
-            Let&apos;s build something{" "}
-            <span className="italic text-accent font-normal">together.</span>
+            {cta?.title ?? (
+              <>
+                Let&apos;s build something{" "}
+                <span className="italic text-accent font-normal">together.</span>
+              </>
+            )}
           </h2>
 
           <p className="font-body text-stone-500 dark:text-ink-400 text-base md:text-lg max-w-md mx-auto mb-12 leading-relaxed">
-            I&apos;m open to frontend roles, freelance projects, and collaborations. Drop me a message.
+            {cta?.text ??
+              "I'm open to frontend roles, freelance projects, and collaborations. Drop me a message."}
           </p>
 
           <a
@@ -77,7 +97,7 @@ export default function Footer({ personalInfo }: { personalInfo: PersonalInfo })
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
               <polyline points="22,6 12,13 2,6" />
             </svg>
-            Send a Message
+            {cta?.buttonLabel ?? "Send a Message"}
           </a>
         </div>
       </div>
