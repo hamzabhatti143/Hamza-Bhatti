@@ -94,11 +94,10 @@ export default function Achievements({
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14" role="list" aria-label="Key metrics">
+        <ul className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14" role="list" aria-label="Key metrics">
           {stats.map((s, i) => (
-            <div
+            <li
               key={s.label}
-              role="listitem"
               className="ach-item card-hover bg-white/70 dark:bg-ink-900/60 border border-stone-200 dark:border-ink-800 rounded-lg p-5 text-center"
               style={{
                 opacity: 0,
@@ -109,16 +108,15 @@ export default function Achievements({
               <p className="font-display text-3xl md:text-4xl font-bold text-accent mb-1">{s.value}</p>
               <p className="font-body text-sm font-medium text-stone-700 dark:text-ink-200 mb-0.5">{s.label}</p>
               <p className="font-mono text-[10px] text-stone-400 dark:text-ink-600">{s.sub}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* Achievement cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" role="list" aria-label="Achievements and certifications">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-5" role="list" aria-label="Achievements and certifications">
           {achievements.map((ach, i) => (
-            <article
+            <li
               key={ach.title}
-              role="listitem"
               aria-label={`${ach.type === "award" ? "Award" : "Certification"}: ${ach.title}`}
               className="ach-item card-hover bg-white/70 dark:bg-ink-900/60 border border-stone-200 dark:border-ink-800 rounded-lg p-6 group flex items-start gap-4"
               style={{
@@ -162,9 +160,9 @@ export default function Achievements({
                 </div>
                 <p className="font-mono text-xs text-stone-400 dark:text-ink-500 leading-relaxed">{ach.issuer}</p>
               </div>
-            </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

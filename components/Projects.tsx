@@ -446,13 +446,13 @@ export default function Projects({
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" role="list" aria-label="Web and browser-based projects">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" role="list" aria-label="Web and browser-based projects">
           {webProjects.map((project, i) => (
-            <div key={project.title} role="listitem" className="flex">
+            <li key={project.title} className="flex">
               <WebCard project={project} index={projects.indexOf(project)} staggerDelay={`${i * 90}ms`} />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* Divider */}
         <div aria-hidden="true" className="section-rule w-full mb-16" />
@@ -516,13 +516,13 @@ export default function Projects({
         </div>
 
         {/* CLI cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" role="list" aria-label="CLI and terminal projects">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-6" role="list" aria-label="CLI and terminal projects">
           {cliProjects.map((project, i) => (
-            <div key={project.title} role="listitem" className="flex">
+            <li key={project.title} className="flex">
               <TerminalCard project={project} index={projects.indexOf(project)} githubFallback={personalInfo.github} staggerDelay={`${(webProjects.length + i) * 90}ms`} />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

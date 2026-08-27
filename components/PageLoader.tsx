@@ -10,8 +10,8 @@ export default function PageLoader() {
   useEffect(() => {
     // Trigger animation only after hydration is complete
     const t0 = setTimeout(() => setReady(true),   50);
-    const t1 = setTimeout(() => setHiding(true),  950);
-    const t2 = setTimeout(() => setGone(true),   1500);
+    const t1 = setTimeout(() => setHiding(true),  350);
+    const t2 = setTimeout(() => setGone(true),    600);
     return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2); };
   }, []);
 

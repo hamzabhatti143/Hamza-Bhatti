@@ -3,7 +3,7 @@ import { Playfair_Display, DM_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 import { ThemeProvider } from "@/context/ThemeContext";
-import CursorGlow from "@/components/CursorGlow";
+import DeferredCursorGlow from "@/components/DeferredCursorGlow";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import DeferredVisitorChat from "@/components/DeferredVisitorChat";
 
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
   category: "technology",
   alternates: { canonical: "/" },
   icons: {
-    icon: "/images/logo.png",
-    shortcut: "/images/logo.png",
-    apple: "/images/logo.png",
+    icon: "/images/favicon.png",
+    shortcut: "/images/favicon.png",
+    apple: "/images/apple-icon.png",
   },
   robots: {
     index: true,
@@ -99,7 +99,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className="grain-overlay antialiased">
-        <CursorGlow />
+        <DeferredCursorGlow />
         <WhatsAppFloat />
         <DeferredVisitorChat />
         <ThemeProvider>

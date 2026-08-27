@@ -1,10 +1,11 @@
 # Hamza Bhatti
 
-I'm Hamza Bhatti, a Frontend Developer and Agentic AI Developer based in Karachi,
-Pakistan. I'm a full-stack developer with a frontend-leaning background and hands-on
-SEO expertise — technical, on-page, and content, not just the technical side. I build
-fast, accessible web applications and integrate AI into them using the OpenAI Agents
-SDK and RAG systems.
+> Frontend Developer & Agentic AI Developer based in Karachi, Pakistan. I build fast,
+> accessible, SEO-friendly web applications with Next.js and FastAPI, and integrate AI
+> into them using the OpenAI Agents SDK and RAG systems.
+
+I'm a full-stack developer with a frontend-leaning background and hands-on SEO expertise
+— technical, on-page, and content, not just the technical side.
 
 ## Core Stack
 

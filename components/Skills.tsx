@@ -80,11 +80,10 @@ export default function Skills({ skillCategories }: { skillCategories: SkillCate
           <div aria-hidden="true" className="section-rule w-full mt-8" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Skill categories">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Skill categories">
           {skillCategories.map((cat, index) => (
-            <article
+            <li
               key={cat.category}
-              role="listitem"
               aria-label={`${cat.category} skills`}
               className="skill-card card-hover bg-white/70 dark:bg-ink-900/60 border border-stone-200 dark:border-ink-800 rounded-lg p-6 group"
               style={{
@@ -110,9 +109,9 @@ export default function Skills({ skillCategories }: { skillCategories: SkillCate
                   </li>
                 ))}
               </ul>
-            </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
