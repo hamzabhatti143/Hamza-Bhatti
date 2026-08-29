@@ -50,7 +50,16 @@ export async function POST(req: NextRequest) {
   }
 
   if (!upstream.ok) {
-    // The backend was reached but returned an error status.
+    // 502/503/504 from the upstream host are gateway errors — on a free-tier
+    // Hugging Face Space this means it's cold-starting or redeploying, not a real
+    // failure. Surface a friendly "waking up" message rather than a raw status.
+    if ([502, 503, 504].includes(upstream.status)) {
+      return NextResponse.json(
+        { error: "The backend is starting up — this can take a moment. Please try again shortly." },
+        { status: 503 }
+      );
+    }
+    // Any other non-OK status is a genuine backend error.
     return NextResponse.json(
       { error: `The admin backend returned an error (status ${upstream.status}). Please try again.` },
       { status: 502 }
