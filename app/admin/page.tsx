@@ -26,6 +26,7 @@ export default function AdminPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [slowHint, setSlowHint] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("Projects");
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -62,16 +63,20 @@ export default function AdminPage() {
     setInput("");
     setIsLoading(true);
 
+    // The backend may be a sleeping HF Space; after a few seconds, signal that a
+    // longer wait (cold start) is expected rather than a hang.
+    const slowTimer = setTimeout(() => setSlowHint(true), 6_000);
+
     try {
       const res = await fetch("/api/admin-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, password, session_id: sessionId.current }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: data.reply ?? data.error ?? "No response." },
+        { role: "assistant", content: data?.reply ?? data?.error ?? "No response." },
       ]);
     } catch {
       setMessages((prev) => [
@@ -79,6 +84,8 @@ export default function AdminPage() {
         { role: "assistant", content: "Connection error. Is the backend running?" },
       ]);
     } finally {
+      clearTimeout(slowTimer);
+      setSlowHint(false);
       setIsLoading(false);
     }
   }
@@ -245,6 +252,11 @@ export default function AdminPage() {
                   <span className="font-mono text-xs text-[var(--text-mid)] animate-pulse">
                     thinking…
                   </span>
+                  {slowHint && (
+                    <p className="font-mono text-[11px] text-[var(--text-mid)] mt-2 leading-snug">
+                      Waking up the backend — this can take up to a minute on the first request.
+                    </p>
+                  )}
                 </div>
               </div>
             )}

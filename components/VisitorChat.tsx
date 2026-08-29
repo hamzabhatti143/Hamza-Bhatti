@@ -19,6 +19,7 @@ export default function VisitorChat() {
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [slowHint, setSlowHint] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const sessionId = useRef<string>(
@@ -43,23 +44,30 @@ export default function VisitorChat() {
     setInput("");
     setIsTyping(true);
 
+    // The backend may be a sleeping HF Space; after a few seconds, reassure the
+    // visitor that a longer wait is expected rather than a hang.
+    const slowTimer = setTimeout(() => setSlowHint(true), 6_000);
+
     try {
       const res = await fetch("/api/visitor-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, session_id: sessionId.current }),
       });
-      const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.reply ?? "Sorry, I couldn't get a response." },
-      ]);
+      const data = await res.json().catch(() => null);
+      const content =
+        data?.reply ??
+        data?.error ??
+        "Sorry, I couldn't get a response. Please try again.";
+      setMessages((prev) => [...prev, { role: "assistant", content }]);
     } catch {
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again." },
       ]);
     } finally {
+      clearTimeout(slowTimer);
+      setSlowHint(false);
       setIsTyping(false);
     }
   }, [input, isTyping]);
@@ -208,6 +216,11 @@ export default function VisitorChat() {
                       />
                     ))}
                   </span>
+                  {slowHint && (
+                    <p className="mt-2 text-[11px] leading-snug" style={{ color: "var(--text-mid)" }}>
+                      Waking up the assistant — this can take up to a minute on the first message.
+                    </p>
+                  )}
                 </div>
               </div>
             )}
