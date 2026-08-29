@@ -160,7 +160,7 @@ export default function Footer({
                     target={link.href.startsWith("mailto") ? undefined : "_blank"}
                     rel={link.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
                     aria-label={`${link.label}${link.href.startsWith("mailto") ? "" : " (opens in new tab)"}`}
-                    className="text-stone-400 dark:text-ink-600 hover:text-accent transition-colors duration-300 block p-1"
+                    className="text-stone-500 dark:text-ink-400 hover:text-accent transition-colors duration-300 block p-1"
                   >
                     {link.icon}
                   </a>
