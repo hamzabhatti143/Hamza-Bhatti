@@ -9,7 +9,9 @@ import DeferredVisitorChat from "@/components/DeferredVisitorChat";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
+  // 900 (font-black) is unused anywhere on the site — dropping it trims @font-face
+  // rules from the render-blocking font CSS and avoids generating the 900 webfonts.
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-playfair",
   display: "swap",

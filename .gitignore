@@ -30,6 +30,7 @@ next-env.d.ts
 Thumbs.db
 
 # Lighthouse reports
+lighthouse-*.json
 lighthouse-report.json
 
 # Logs

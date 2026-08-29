@@ -6,13 +6,34 @@ export default function ScrollProgress() {
   const [pct, setPct] = useState(0);
 
   useEffect(() => {
-    const update = () => {
-      const el    = document.documentElement;
-      const total = el.scrollHeight - el.clientHeight;
-      setPct(total ? (el.scrollTop / total) * 100 : 0);
+    const el = document.documentElement;
+    // scrollHeight/clientHeight only change on resize — reading them on every scroll
+    // event forces a synchronous reflow right after the progress-bar width write
+    // (layout thrash). Cache the max scroll distance and only recompute on resize,
+    // and read scrollTop inside rAF so the read/write are batched with paint.
+    let max = el.scrollHeight - el.clientHeight;
+    let ticking = false;
+
+    const paint = () => {
+      ticking = false;
+      setPct(max > 0 ? (el.scrollTop / max) * 100 : 0);
     };
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(paint);
+      }
+    };
+    const onResize = () => {
+      max = el.scrollHeight - el.clientHeight;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
