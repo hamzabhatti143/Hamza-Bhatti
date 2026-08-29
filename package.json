@@ -2,6 +2,15 @@
   "name": "hamza-portfolio",
   "version": "0.1.0",
   "private": true,
+  "browserslist": [
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "last 2 chrome versions",
+    "last 2 firefox versions",
+    "last 2 safari versions",
+    "last 2 edge versions"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

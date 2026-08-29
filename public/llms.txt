@@ -1,49 +1,49 @@
 # Hamza Bhatti
 
-> Frontend Developer & Agentic AI Developer based in Karachi, Pakistan. I build fast,
-> accessible, SEO-friendly web applications with Next.js and FastAPI, and integrate AI
-> into them using the OpenAI Agents SDK and RAG systems.
+> Frontend Developer & Agentic AI Developer based in Karachi, Pakistan — I build fast, accessible, SEO-friendly web apps with Next.js, FastAPI, and PostgreSQL, and integrate AI using the OpenAI Agents SDK and RAG systems.
 
-I'm a full-stack developer with a frontend-leaning background and hands-on SEO expertise
-— technical, on-page, and content, not just the technical side.
+Full-stack developer with a frontend-leaning background and hands-on SEO expertise — technical, on-page, and content. Available for frontend roles, freelance work, and AI-integration projects.
 
-## Core Stack
+## Pages
 
-- **Next.js** — App Router, server components, and static/SSR rendering
-- **FastAPI** — Python backends and Agentic-AI services
-- **PostgreSQL** — relational data modeling and persistence
-- **TypeScript** — strongly-typed, maintainable application code
-- **Tailwind CSS** — responsive, utility-first UI
+- [Home](https://hamza-bhatti.vercel.app/): Portfolio overview, skills, and featured work.
+- [About](https://hamza-bhatti.vercel.app/about): Background, experience, and how I work.
+- [Projects](https://hamza-bhatti.vercel.app/projects): Full list of web, AI, and CLI projects.
+- [Services](https://hamza-bhatti.vercel.app/services): Full-stack development, AI integration, and SEO services.
+- [Blog](https://hamza-bhatti.vercel.app/blog): Articles on Next.js, FastAPI, PostgreSQL, and SEO.
+- [Resume](https://hamza-bhatti.vercel.app/resume): Experience, education, and skills summary.
+- [Contact](https://hamza-bhatti.vercel.app/contact): Get in touch for work or collaboration.
 
-## Key Pages
+## Projects
 
-- Home: https://hamza-bhatti.vercel.app/
-- About: https://hamza-bhatti.vercel.app/about
-- Projects: https://hamza-bhatti.vercel.app/projects
-- Blog: https://hamza-bhatti.vercel.app/blog
-- Services: https://hamza-bhatti.vercel.app/services
-- Resume: https://hamza-bhatti.vercel.app/resume
-- Contact: https://hamza-bhatti.vercel.app/contact
+- [Agri Tech AI Platform](https://farm-smart-ai.vercel.app/): AI-powered agriculture platform using four Agentic AI models on a Dockerized microservices architecture.
+- [Outreach Tool for SEO](https://outreach-tool-drab.vercel.app/): Agentic-AI outreach tool built with Next.js, Python, and Neon DB to optimize SEO campaigns.
+- [Todo App + AI Chatbot](https://todo-app-with-ai-chatbot.vercel.app/): Productivity app with an integrated AI chatbot for natural-language task management.
+- [Morrent — Car Rental](https://morrent-ten.vercel.app/): Full-featured car-rental web app with browsing, filtering, and a booking flow.
+- [Random Password Generator](https://random-password-generator-ten-iota.vercel.app/): Secure password generator with a strength meter and one-click copy.
 
-## Services I Offer
+## Blog
 
-- Full-Stack Web Development (Next.js + FastAPI)
-- AI-Integrated Applications (agentic AI, RAG chatbots, automation)
-- Complete SEO (technical, on-page & content audits and optimization)
-- WordPress Development
+- [How I Use Claude Code for Full-Stack Development](https://hamza-bhatti.vercel.app/blog/how-i-use-claude-code-full-stack-development): The workflow I use to ship full-stack features faster with Claude Code across Next.js and FastAPI.
+- [JWT Auth in Next.js 15 App Router: A Practical Guide](https://hamza-bhatti.vercel.app/blog/jwt-auth-nextjs-15-app-router): Issuing tokens, httpOnly cookies, and verifying auth in middleware and server components.
+- [Row-Level Locking in PostgreSQL](https://hamza-bhatti.vercel.app/blog/postgresql-row-level-locking-booking-systems): Using SELECT FOR UPDATE to prevent double-bookings and race conditions in booking systems.
+- [Technical SEO Checklist for Developers](https://hamza-bhatti.vercel.app/blog/technical-seo-checklist-for-developers): A developer-focused checklist covering crawlability, indexing, Core Web Vitals, and structured data.
+- [How to Build a Two-Sided Marketplace with Next.js and FastAPI](https://hamza-bhatti.vercel.app/blog/two-sided-marketplace-nextjs-fastapi): The architecture I use for marketplaces with Next.js, FastAPI, and PostgreSQL.
 
-## Links
+## Services
 
-- GitHub: https://github.com/hamzabhatti143
-- LinkedIn: https://www.linkedin.com/in/hamzabhatti143
-- Email: bhatti3993@gmail.com
+- [Full-Stack Web Development](https://hamza-bhatti.vercel.app/services): Next.js front ends with FastAPI + PostgreSQL back ends.
+- [AI-Integrated Applications](https://hamza-bhatti.vercel.app/services): Agentic AI, RAG chatbots, and workflow automation.
+- [Technical & On-Page SEO](https://hamza-bhatti.vercel.app/services): Audits and optimization for crawlability, speed, and content.
 
-## Skills
+## Resume
 
-- Frontend: Next.js, React, Tailwind CSS, responsive & accessible UI
-- Languages: TypeScript, JavaScript, Python, .NET Core
-- Backend & Tools: FastAPI, Node.js, PostgreSQL, Docker, Git & GitHub
-- AI & Modern Tech: Agentic AI with the OpenAI Agents SDK, RAG systems, Hugging Face,
-  Claude & Gemini CLIs, AI-driven development
-- Concepts: strong typing, OOP, async programming, API integration, microservices,
-  and ADA accessibility
+- [Resume](https://hamza-bhatti.vercel.app/resume): Full experience, education, and skills.
+- [Download CV (PDF)](https://hamza-bhatti.vercel.app/files/Hamzabhatti-web.pdf): Printable resume.
+
+## Contact
+
+- [Contact](https://hamza-bhatti.vercel.app/contact): Contact form and details.
+- [Email](mailto:bhatti3993@gmail.com): bhatti3993@gmail.com
+- [GitHub](https://github.com/hamzabhatti143): Open-source projects and code.
+- [LinkedIn](https://www.linkedin.com/in/hamzabhatti143): Professional profile.

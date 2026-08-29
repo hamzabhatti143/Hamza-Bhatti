@@ -427,7 +427,7 @@ export default function Projects({
             <h2 id="projects-heading" className="font-display text-4xl md:text-5xl font-bold text-stone-900 dark:text-ink-50">
               Selected <span className="italic text-accent font-normal">Projects</span>
             </h2>
-            <p className="font-mono text-xs text-ink-600 tracking-widest">
+            <p className="font-mono text-xs text-ink-600 dark:text-ink-400 tracking-widest">
               {String(projects.length).padStart(2, "0")} projects total
             </p>
           </div>
@@ -441,7 +441,7 @@ export default function Projects({
             <h3 className="font-mono text-xs tracking-[0.25em] uppercase text-accent">Web / Browser</h3>
           </div>
           <div aria-hidden="true" className="flex-1 h-px bg-accent/20" />
-          <span className="font-mono text-[10px] text-ink-700">
+          <span className="font-mono text-[10px] text-ink-700 dark:text-ink-400">
             {String(webProjects.length).padStart(2, "0")} projects
           </span>
         </div>
@@ -467,7 +467,7 @@ export default function Projects({
               </h3>
             </div>
             <div aria-hidden="true" className="flex-1 h-px bg-green-900/30" />
-            <span className="font-mono text-[10px] text-ink-700">
+            <span className="font-mono text-[10px] text-ink-700 dark:text-ink-400">
               {String(cliProjects.length).padStart(2, "0")} projects
             </span>
           </div>

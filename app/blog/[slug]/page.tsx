@@ -8,6 +8,7 @@ import PageFrame from "@/components/PageFrame";
 import JsonLd from "@/components/JsonLd";
 import { getPost, getPostSlugs, getAllPosts, formatDate } from "@/lib/blog";
 import { SITE, SITE_URL } from "@/lib/site";
+import "../blog-prose.css";
 
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
